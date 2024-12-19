@@ -40,7 +40,7 @@ function replaceOperator() {
         .then(serverTime => {
             var now = new Date(serverTime);
 
-            // Load the operators from the JSON file
+            // Load the bosses from the JSON file
             fetch('operators.json')
                 .then(response => response.json())
                 .then(operators => {

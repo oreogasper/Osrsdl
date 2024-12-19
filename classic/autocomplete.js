@@ -1,5 +1,5 @@
-//import operators from './operators.json' with {type:'json'}
-import {operators} from './main.js';
+//import bosses from './bosses.json' with {type:'json'}
+import {bosses} from './main.js';
 import { getGuessedOperators } from './main.js';
 let lowerCaseGuessedOperators
 let matchingNames
@@ -8,7 +8,7 @@ window.addEventListener('guessedOperatorsLoaded', function() {
     console.log('autocomplete is ready');
 
 // Get a list of operator names
-let availableNames = operators.map(operator => operator.name);
+let availableNames = bosses.map(operator => operator.name);
 let usedNames = []; // List of used names
 window.addEventListener('clearUsedNames', function() {
   usedNames = [];
@@ -38,7 +38,7 @@ inputField.addEventListener('input', () => {
     // Clear the results container
     resultsContainer.innerHTML = '';
   
-    // Only display the matching operators if the input field is not empty
+    // Only display the matching bosses if the input field is not empty
     if (inputValue !== '') {
       // Filter the names based on the input value and exclude used names
       

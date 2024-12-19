@@ -1,46 +1,36 @@
 // Parse the JSON data
 let nextTime
-let operator
-export let operators
-let countryToContinent = {};
+let boss
+export let bosses
 //changes for a test
-let guessedOperators = []
+let guessedBosses = []
 let lastSolvedTimestamp
 
 window.onload = async function() {
-    const operatorResponse = await fetch('./operator.json');
-    const operatorData = await operatorResponse.json();
-    operator = operatorData;
-    nextTime = new Date(operator[0].nextChange);
-    const operatorsResponse = await fetch('./operators.json')
-    const operatorsData = await operatorsResponse.json();
-    const continentsResponse = await fetch('./continents.json');
-    const continentsData = await continentsResponse.json();
-    operators = operatorsData
+    const operatorResponse = await fetch('./boss.json');
+    boss = await operatorResponse.json();
+    nextTime = new Date(boss[0].nextChange);
+    const operatorsResponse = await fetch('./bosses.json')
+    bosses = await operatorsResponse.json()
     lastSolvedTimestamp = localStorage.getItem('lastSolvedTimestamp')
-    // Create a country to continent mapping
-    for (let continent in continentsData) {
-        continentsData[continent].forEach(country => {
-            countryToContinent[country] = continent;
-        });
-    }
-    //console.log(operator)
-    //console.log(operators)
+
+    //console.log(boss)
+    //console.log(bosses)
     loadTriedOperators()
 
     // Get the saved mode from localStorage
     let savedMode = localStorage.getItem('mode');
-    let lastGuessedOp = localStorage.getItem('lastGuessedOp')
+    let lastGuessedBoss = localStorage.getItem('lastGuessedBoss')
 
     checkDailyStreak();
 
-    // Check if the last guessed Operator is equal to the current operator and if that is not true set dailyWon to false
-    if (lastGuessedOp != operator[0].name || lastGuessedOp === null) {
+    // Check if the last guessed Operator is equal to the current boss and if that is not true set dailyWon to false
+    if (lastGuessedBoss !== boss[0].name || lastGuessedBoss === null) {
         localStorage.setItem('dailyWon', 'false')
 
-        if (guessedOperators.length > 0) {
+        if (guessedBosses.length > 0) {
             localStorage.setItem('guessedOperators', [])
-            guessedOperators = localStorage.getItem('guessedOperators')
+            guessedBosses = localStorage.getItem('guessedOperators')
         }
     }
 
@@ -76,8 +66,6 @@ function checkDailyStreak() {
     }
 }
 
-
-
 // Create a container for the keys
 let keysContainer = document.createElement('div');
 keysContainer.className = 'classic-answers-container';
@@ -87,7 +75,7 @@ let keysRow = document.createElement('div');
 keysRow.className = 'answer-titles square-container animate__animated animate__fadeIn';
 
 // Create boxes for the keys
-let keys = ['name', 'solo level', 'hitpoints', 'attack Style', 'solo', 'release Year', 'a', 'a'];
+let keys = ["name", "solo_level", "hitpoints", "attack_style", "release_year", "region", "solo"];
 keys.forEach(key => {
     let box = document.createElement('div');
     box.className = 'square square-title';
@@ -107,7 +95,7 @@ keysContainer.appendChild(keysRow);
 function updateModeIndicator(mode) {
     const modeIndicator = document.getElementById('mode-indicator');
     modeIndicator.textContent = `Current mode: ${mode}`;
-    if (mode == 'Daily'){
+    if (mode === 'Daily'){
         let button = document.createElement('button')
         button.className = 'de_button'
         button.innerHTML = 'Endless Mode'
@@ -116,7 +104,7 @@ function updateModeIndicator(mode) {
         }
         modeIndicator.appendChild(button)
 
-    }else if( mode == 'Endless'){
+    }else if( mode === 'Endless'){
         let button = document.createElement('button')
         button.className = 'de_button'
         button.innerHTML = 'Daily Mode'
@@ -128,17 +116,17 @@ function updateModeIndicator(mode) {
   }
     let dailyGuesses = 0;
     let endlessGuesses = 0;
-    let operatorToGuess
+    let bossToGuess
     let dailyResult = 0;
     let endlessResult = 0;
+
     window.endlessMode = function() {
     // Logic for endless mode
     updateModeIndicator('Endless');
-    //console.log("Now endless mode")
     localStorage.setItem('mode', 'endless');
     displayStreak();
     endlessGuesses = setEndlessGuesses();
-    operatorToGuess = setOperatorToGuess();
+    bossToGuess = setOperatorToGuess();
     loadTriedOperators()
     var event = new CustomEvent('clearUsedNames');
             window.dispatchEvent(event);
@@ -154,10 +142,7 @@ window.dailyMode = function () {
     // Enable the input
     let input = document.getElementById('inputField');
     if (input) {
-        input.disabled = false;
-        if (localStorage.getItem('dailyWon') === 'true') {
-            input.disabled = true
-        }
+        input.disabled = localStorage.getItem('dailyWon') === 'true';
     }
     // Logic for daily mode
     updateModeIndicator('Daily');
@@ -165,7 +150,7 @@ window.dailyMode = function () {
     localStorage.setItem('mode', 'daily');
     displayDailyStreak();
     dailyGuesses = setDailyGuesses();
-    operatorToGuess = setOperatorToGuess();
+    bossToGuess = setOperatorToGuess();
     var event = new CustomEvent('clearUsedNames');
             window.dispatchEvent(event);
     clear();
@@ -176,232 +161,211 @@ window.dailyMode = function () {
 
     //Use guess and askForGuess as needed
 }
-    // numbers
-    let dailyStreakCount = localStorage.getItem('dailyStreakCount') || 0;
+// numbers
+let dailyStreakCount = localStorage.getItem('dailyStreakCount') || 0;
 
     // Function to handle a new guess
-    function guess(operatorName) {
 
-        if (localStorage.getItem('mode') === 'daily') {
-            if (dailyGuesses == 0){
-                tutoButton()
-            }
-            dailyGuesses++
-            localStorage.setItem('dailyGuesses', dailyGuesses)
-        } else if (localStorage.getItem('mode') === 'endless') {
-            if(endlessGuesses == 0){
-                tutoButton()
-            }
-            endlessGuesses++
-            localStorage.setItem('endlessGuesses', endlessGuesses)
+function guess(bossName) {
+    const mode = localStorage.getItem('mode');
+    handleGuesses(mode);
+
+    console.log(`daily: ${dailyGuesses}, endless: ${endlessGuesses}`);
+
+    const boss = findBoss(bossName);
+    if (!boss) {
+        console.log("🔴 Boss not found");
+        return askForGuess();
+    }
+
+    console.log("Found boss:", boss);
+    compareBosses(boss, bossToGuess);
+
+    if (bossName.toLowerCase() === bossToGuess.name.toLowerCase()) {
+        handleWinning(bossName, mode);
+    } else {
+        handleGuessFeedback(boss, bossToGuess);
+        compareOperators(boss, bossToGuess); // Compare visually
+        saveTriedOperators();
+        askForGuess();
+    }
+}
+
+function handleGuesses(mode) {
+    if (mode === 'daily') {
+        if (dailyGuesses === 0) tutoButton();
+        dailyGuesses++;
+        localStorage.setItem('dailyGuesses', dailyGuesses);
+    } else if (mode === 'endless') {
+        if (endlessGuesses === 0) tutoButton();
+        endlessGuesses++;
+        localStorage.setItem('endlessGuesses', endlessGuesses);
+    }
+}
+
+function findBoss(bossName) {
+    return bosses.find(
+        boss => typeof boss.name === 'string' && boss.name.toLowerCase() === bossName.toLowerCase()
+    );
+}
+
+function compareBosses(boss, bossToGuess) {
+    const keys = ["name", "solo_level", "hitpoints", "attack_style", "release_year", "region", "solo"];
+    let sharedCriteria = false;
+
+    keys.forEach(key => {
+        if (processKeyComparison(boss, bossToGuess, key, false)) {
+            sharedCriteria = true; // Update sharedCriteria if any key matches
         }
-        console.log('daily: ' + dailyGuesses + '  endless: ' + endlessGuesses)
-        // Find the boss in the list
-        const boss = operators.find(op => typeof op.name === 'string' && op.name.toLowerCase() === operatorName.toLowerCase());
-        compareOperators(boss,operatorToGuess)
-        // Debugging output
-        console.log("Found boss:", boss);
-        // If the boss is not found, it's a wrong guess
-        if (!boss) {
-            console.log("🔴 Operator not found");
-            return askForGuess();
-        }
+    });
 
-        // Compare the boss data with the selected boss
-        const keys = ["name","gender", "role", "side", "country", "Org", "Squad", "release_year"];
-        let sharedCriteria = false;
+    return sharedCriteria; // Return whether any criteria matched
+}
 
-        const normalizeRoles = roles => roles.split(',').map(role => role.trim()).sort().join(', ');
+function processKeyComparison(boss, bossToGuess, key, isVisual) {
+    const squareClasses = {
+        good: 'square-good',
+        bad: 'square-bad',
+        partial: 'square-partial',
+    };
 
-        keys.forEach(key => {
-            if (key === 'release_year') {
-                if (boss[key] < operatorToGuess[key]) {
-                    console.log(`⬆️ ${key}: ${boss[key]}`);
-                } else if (boss[key] > operatorToGuess[key]) {
-                    console.log(`⬇️ ${key}: ${boss[key]}`);
-                } else {
-                    console.log(`✅ ${key}: ${boss[key]}`);
-                }
-            } else if (Array.isArray(boss[key]) && Array.isArray(operatorToGuess[key])) {
-                const normalizedOperatorRole = normalizeRoles(boss[key].join(','));
-                const normalizedOperatorToGuessRole = normalizeRoles(operatorToGuess[key].join(','));
-
-                if (normalizedOperatorRole === normalizedOperatorToGuessRole) {
-                    console.log(`✅ ${key}: ${boss[key].join(", ")}`);
-                    sharedCriteria = true;
-                } else {
-                    const matchingRoles = boss[key].filter(role => normalizedOperatorToGuessRole.includes(role));
-
-                    if (matchingRoles.length > 0) {
-                        console.log(`🟠 ${key}: ${boss[key].join(", ")}`);
-                        sharedCriteria = true;
-                    } else {
-                        console.log(`🔴 ${key}: ${boss[key].join(", ")}`);
-                    }
-                }
-            } else if (key === 'country' && boss[key] !== operatorToGuess[key] && countryToContinent[boss[key]] === countryToContinent[operatorToGuess[key]]) {
-                console.log(`🟠 ${key}: ${boss[key]}`);
-                sharedCriteria = true;
-            } else if (typeof boss[key] === 'string' && boss[key] === operatorToGuess[key]) {
-                console.log(`✅ ${key}: ${boss[key]}`);
-                sharedCriteria = true;
-            } else {
-                console.log(`🔴 ${key}: ${boss[key]}`);
-            }
-        });
-
-        // Check if the boss name is fully guessed
-        if (operatorName.toLowerCase() === operatorToGuess.name.toLowerCase()) {
-            console.log("You won! The boss was " + operatorToGuess.name );
-            if(localStorage.getItem('mode') === 'daily'){
-                localStorage.setItem('dailyWon', 'true')
-                localStorage.setItem('lastGuessedOp', operatorName)
-            }
-            problemSolved();
-
+    if (key === 'release_year' || key === 'hitpoints' || key === 'solo_level') {
+        if (boss[key] === bossToGuess[key]) {
+            logComparison(isVisual, key, boss[key], squareClasses.good, "✅");
+            return true; // Match found
         } else {
-            if (sharedCriteria) {
-                console.log("🟠 The guessed boss shares some criteria with the boss to find.");
-            } else {
-                console.log("🔴 The guessed boss does not share any criteria with the boss to find.");
-            }
-            saveTriedOperators();
-            askForGuess();
+            const icon = boss[key] < bossToGuess[key] ? "⬆️" : "⬇️";
+            logComparison(isVisual, key, boss[key], squareClasses.bad, icon);
+            return false; // No match
         }
+    } else if (Array.isArray(boss[key]) && Array.isArray(bossToGuess[key])) {
+        const matchingRoles = boss[key].filter(role => bossToGuess[key].includes(role));
+        if (matchingRoles.length > 0) {
+            logComparison(isVisual, key, boss[key].join(", "), squareClasses.partial, "🟠");
+            return true; // Partial match
+        } else {
+            logComparison(isVisual, key, boss[key].join(", "), squareClasses.bad, "🔴");
+            return false; // No match
+        }
+    } else if (boss[key] === bossToGuess[key]) {
+        logComparison(isVisual, key, boss[key], squareClasses.good, "✅");
+        return true; // Match found
+    } else {
+        logComparison(isVisual, key, boss[key], squareClasses.bad, "🔴");
+        return false; // No match
+    }
+}
 
-        function compareOperators(boss, bossToGuess) {
-            // Compare the boss data with the selected boss
-            const keys = ["name","gender", "role", "side", "country", "Org", "Squad", "release_year"];
-            let sharedCriteria = false;
-            let answerclassic = document.createElement('div');
-            answerclassic.className = 'classic-answer'
-            const container = document.getElementById('answercon')
-            let squarecontainer = document.createElement('div');
-            squarecontainer.className = 'square-container'
+function logComparison(isVisual, key, value, squareClass, icon) {
+    if (isVisual) {
+        const square = document.createElement('div');
+        square.className = `square animate__animated animate__flipInY ${squareClass}`;
+        const content = document.createElement('div');
+        content.className = 'square-content';
+        content.textContent = `${icon} ${value}`;
+        square.appendChild(content);
+        return square; // Return visual element
+    } else {
+        console.log(`${icon} ${key}: ${value}`); // Log to console
+    }
+}
 
-            // Create the image square first
-            let imgSquare = document.createElement('div');
-            imgSquare.className = 'square animate__animated animate__flipInY';
+function compareOperators(boss, bossToGuess) {
+    // 🟢 Neon Green: Added operator comparison and UI logic
+    const keys = ["name", "solo_level", "hitpoints", "attack_style", "release_year", "region", "solo"];
+    let sharedCriteria = false;
 
-            let img = document.createElement('img');
-            // img.src = `../images/mobs/r6s-operators-badge-${operatorName.toLowerCase()}.png`;
-            img.src = `../images/mobs/ahrim.png`;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
+    const container = document.getElementById('answercon');
+    let answerClassic = document.createElement('div');
+    answerClassic.className = 'classic-answer';
 
-            imgSquare.appendChild(img);
-            imgSquare.classList.add('square-title')
-            squarecontainer.appendChild(imgSquare);
+    let squareContainer = document.createElement('div');
+    squareContainer.className = 'square-container';
 
-            keys.forEach(key => {
-                let square = document.createElement('div');
-                square.className = 'square animate__animated animate__flipInY';
+    // Create the image square
+    let imgSquare = document.createElement('div');
+    imgSquare.className = 'square animate__animated animate__flipInY';
 
-                let content = document.createElement('div');
-                content.className = 'square-content';
+    let img = document.createElement('img');
+    img.src = `../images/mobs/ahrim.png`; // Placeholder image logic
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
 
+    imgSquare.appendChild(img);
+    imgSquare.classList.add('square-title');
+    squareContainer.appendChild(imgSquare);
 
-                if (key === 'release_year') {
-                    if (boss[key] < bossToGuess[key]) {
-                        square.classList.add('square-bad');
-                        content.textContent = `⬆️ ${boss[key]}`;
-                    } else if (boss[key] > bossToGuess[key]) {
-                        square.classList.add('square-bad');
-                        content.textContent = `⬇️ ${boss[key]}`;
-                    } else {
-                        square.classList.add('square-good');
-                        content.textContent = `✅ ${boss[key]}`;
-                        sharedCriteria = true;
-                    }
-                } else if (key === 'name') {
-                    square.classList.add('square-title');
-                    content.textContent = `${boss[key]}`;
-                } else if (Array.isArray(boss[key]) && Array.isArray(bossToGuess[key])) {
-                    const normalizedOperatorRole = boss[key].join(',').split(',').map(role => role.trim()).sort().join(', ');
-                    const normalizedOperatorToGuessRole = bossToGuess[key].join(',').split(',').map(role => role.trim()).sort().join(', ');
+    keys.forEach(key => {
+        let square = document.createElement('div');
+        square.className = 'square animate__animated animate__flipInY';
 
-                    const normalizedOperatorRoleArray = normalizedOperatorRole.split(', ');
-                    const normalizedOperatorToGuessRoleArray = normalizedOperatorToGuessRole.split(', ');
+        let content = document.createElement('div');
+        content.className = 'square-content';
 
-                    if (normalizedOperatorRoleArray.every(role => normalizedOperatorToGuessRoleArray.includes(role)) &&
-                        normalizedOperatorToGuessRoleArray.every(role => normalizedOperatorRoleArray.includes(role))) {
-                        square.classList.add('square-good');
-                        content.textContent = `${boss[key].join(", ")}`;
-                        sharedCriteria = true;
-                    } else {
-                        const matchingRoles = boss[key].filter(role => normalizedOperatorToGuessRole.includes(role));
-
-                        if (matchingRoles.length > 0) {
-                            square.classList.add('square-partial');
-                            content.textContent = `${boss[key].join(", ")}`;
-                            sharedCriteria = true;
-                        } else {
-                            square.classList.add('square-bad');
-                            content.textContent = `${boss[key].join(", ")}`;
-                        }
-                    }
-                } else if (key === 'country') {
-                    if (boss[key] === bossToGuess[key]) {
-                        square.classList.add('square-good');
-                        content.textContent = `${boss[key]}`;
-                        sharedCriteria = true;
-                    } else if (boss[key] !== bossToGuess[key] && countryToContinent[boss[key]] === countryToContinent[bossToGuess[key]]) {
-                        square.classList.add('square-partial');
-                        content.textContent = `${boss[key]}`;
-                        sharedCriteria = true;
-                    } else {
-                        square.classList.add('square-bad');
-                        content.textContent = `${boss[key]}`;
-                    }
-                } else if (typeof boss[key] === 'string' && boss[key].includes(bossToGuess[key])) {
-                    square.classList.add('square-good');
-                    content.textContent = `${boss[key]}`;
-
+        if (key === 'release_year' || key === 'hitpoints' || key === 'solo_level') {
+            if (boss[key] < bossToGuess[key]) {
+                square.classList.add('square-bad');
+                content.textContent = `⬆️ ${boss[key]}`;
+            } else if (boss[key] > bossToGuess[key]) {
+                square.classList.add('square-bad');
+                content.textContent = `⬇️ ${boss[key]}`;
+            } else {
+                square.classList.add('square-good');
+                content.textContent = `✅ ${boss[key]}`;
+                sharedCriteria = true;
+            }
+        } else if (Array.isArray(boss[key]) && Array.isArray(bossToGuess[key])) {
+            const matchingRoles = boss[key].filter(role => bossToGuess[key].includes(role));
+            if (matchingRoles.length > 0) {
+                square.classList.add('square-partial');
+                content.textContent = boss[key].join(', ');
                 sharedCriteria = true;
             } else {
                 square.classList.add('square-bad');
-                content.textContent = `${boss[key]}`;
+                content.textContent = boss[key].join(', ');
             }
-
-            square.appendChild(content);
-            squarecontainer.appendChild(square);
-
-            });
-
-
-            answerclassic.appendChild(squarecontainer)
-
-            // Insert the new result before the first child
-            let firstChild = container.firstChild;
-            container.insertBefore(answerclassic, firstChild);
-            if (operatorName.toLowerCase() === bossToGuess.name.toLowerCase()) {
-                // If the guessed boss is the right one, display the winning screen
-                if (localStorage.getItem('mode') === 'daily'){
-                    dailyResult = dailyGuesses
-                    var date = new Date().getTime();
-                    localStorage.setItem('lastSolvedTimestamp', date);
-                    localStorage.setItem('dailyResult', dailyResult)
-                    localStorage.setItem('dailyGuesses', 0)
-                    incrementSolvedCount();
-                } else if(localStorage.getItem('mode') === 'endless'){
-                    endlessResult = endlessGuesses
-                    localStorage.setItem('endlessGuesses', 0)
-                    incrementGlobalSolved()
-                    let input  = document.getElementById('inputField')
-                    input.disabled = true
-                }
-                displayWinningScreen();
-
-            }
-            return sharedCriteria;
+        } else if (boss[key] === bossToGuess[key]) {
+            square.classList.add('square-good');
+            content.textContent = boss[key];
+            sharedCriteria = true;
+        } else {
+            square.classList.add('square-bad');
+            content.textContent = boss[key];
         }
 
+        square.appendChild(content);
+        squareContainer.appendChild(square);
+    });
 
-        // Get the first object from the output
-        let result = boss;
+    answerClassic.appendChild(squareContainer);
+    container.prepend(answerClassic); // Insert at the top
+}
 
-       // Create a new row
+function handleWinning(bossName, mode) {
+    console.log(`You won! The boss was ${bossToGuess.name}`);
+
+    if (mode === 'daily') {
+        localStorage.setItem('dailyWon', 'true');
+        localStorage.setItem('lastGuessedOp', bossName);
+    }
+    problemSolved();
+    displayWinningScreen();
+}
+
+function handleGuessFeedback(boss, bossToGuess) {
+    const sharedCriteria = compareBosses(boss, bossToGuess);
+
+    if (sharedCriteria) {
+        console.log("🟠 The guessed boss shares some criteria with the boss to find.");
+    } else {
+        console.log("🔴 The guessed boss does not share any criteria with the boss to find.");
+    }
+}
+
+/*
+function createResultRow(boss, keys, resultsContainer) {
+    // 🟢 Neon Green: Logic for creating a new row and appending to the results container
     let row = document.createElement('div');
     row.className = 'resultRow';
 
@@ -409,16 +373,14 @@ window.dailyMode = function () {
     keys.forEach(key => {
         let box = document.createElement('div');
         box.className = 'resultBox';
-        box.textContent = result[key];
+        box.textContent = boss[key]; // Populate the box with the boss data for the key
         row.appendChild(box);
     });
 
     // Append the row to the results container
-    //resultsContainer.appendChild(row);
+    resultsContainer.appendChild(row);
+}*/
 
-    // Clear the input field
-    inputField.value = '';
-};
 
 function displayWinningScreen() {
     if(localStorage.getItem('mode') === 'daily'){
@@ -457,7 +419,7 @@ function displayWinningScreen() {
     img.height = 60;
     img.className = "gg-icon";
     img.className = "gg-icon";
-    var operatorName = operatorToGuess.name;
+    var operatorName = bossToGuess.name;
     img.src = `../images/r6s-operators-badge-${operatorName.toLowerCase()}.png`;
     firstInnerDiv.appendChild(img);
 
@@ -479,7 +441,7 @@ function displayWinningScreen() {
     // Create the gg-name div
     let ggNameDiv = document.createElement('div');
     ggNameDiv.className = 'gg-name';
-    ggNameDiv.innerHTML = operatorToGuess.name; // Replace with the actual operator name
+    ggNameDiv.innerHTML = bossToGuess.name; // Replace with the actual boss name
     secondInnerDiv.appendChild(ggNameDiv); // Append the gg-name div to the second inner div
 
 
@@ -504,12 +466,12 @@ function displayWinningScreen() {
 
     // Create the countdown and append it to the DOM
     let countdown = document.createElement('div');
-    countdown.className = 'next-operator next-operator';
+    countdown.className = 'next-boss next-boss';
 
     let nextTitle = document.createElement('div');
     nextTitle.className = 'next-title';
     countdown.appendChild(nextTitle);
-    nextTitle.innerHTML = 'Next operator in:'
+    nextTitle.innerHTML = 'Next boss in:'
 
     let countdownTime = document.createElement('div');
     countdownTime.className = 'modal-time';
@@ -537,7 +499,7 @@ function displayWinningScreen() {
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(countdownInterval);
-            countdownTime.innerHTML = "Refresh the site to get the new operator";
+            countdownTime.innerHTML = "Refresh the site to get the new boss";
         }
     }, 1000);
 
@@ -567,9 +529,9 @@ function displayWinningScreen() {
 function askForGuess() {
     // Get the button element
     var submitButton = document.getElementById('submitButton');
-    // Create an array of operator names
-    var operatorNames = operators.map(function(operator) {
-        return operator.name;
+    // Create an array of boss names
+    var bossNames = bosses.map(function(boss) {
+        return boss.name;
     });
     // Get the input field element
     var autobox = document.querySelector(".auto-box");
@@ -584,20 +546,20 @@ function askForGuess() {
              // Get the input field value
              var userInput = inputField.value;
 
-             // Check if the operator has already been guessed or empty or does not exist
-            if (guessedOperators.includes(userInput) || userInput === "") {
-                console.log('This operator has already been guessed.');
+             // Check if the boss has already been guessed or empty or does not exist
+            if (guessedBosses.includes(userInput) || userInput === "") {
+                console.log('This boss has already been guessed.');
                 return; // Exit the function early
             } else if (userInput === "") {
             console.log('InputField was empty.');
             return;
-            } else if (!operatorNames.includes(userInput)) {
-            console.log('This operator does not exist.');
+            } else if (!bossNames.includes(userInput)) {
+            console.log('This boss does not exist.');
             return;
             }
 
-             // Add the operator to the array of guessed operators
-             guessedOperators.push(userInput);
+             // Add the boss to the array of guessed bosses
+             guessedBosses.push(userInput);
 
              // Now you can use the userInput value in your code
              guess(userInput);
@@ -608,20 +570,20 @@ function askForGuess() {
         // Get the input field value
         var userInput = inputField.value;
 
-        // Check if the operator has already been guessed or empty or does not exist
-        if (guessedOperators.includes(userInput) || userInput === "") {
-            console.log('This operator has already been guessed.');
+        // Check if the boss has already been guessed or empty or does not exist
+        if (guessedBosses.includes(userInput) || userInput === "") {
+            console.log('This boss has already been guessed.');
             return; // Exit the function early
         } else if (userInput === "") {
            console.log('InputField was empty.');
            return;
-        } else if (!operatorNames.includes(userInput)) {
-           console.log('This operator does not exist.');
+        } else if (!bossNames.includes(userInput)) {
+           console.log('This boss does not exist.');
            return;
         }
 
-        // Add the operator to the array of guessed operators
-        guessedOperators.push(userInput);
+        // Add the boss to the array of guessed bosses
+        guessedBosses.push(userInput);
 
         // Now you can use the userInput value in your code
         guess(userInput);
@@ -655,8 +617,6 @@ function problemSolved() {
         localStorage.setItem('dailyStreakCount', dailyStreakCount.toString())
         // Display the new streak
         document.getElementById('dailyStreakDisplay').textContent = `Your daily streak increased and is now at ${dailyStreakCount}`;
-
-
     }
 }
 
@@ -675,9 +635,9 @@ function displayStreak() {
         currentStreak = 0;
     }
     // Display the current streak
-    if (currentStreak == 0){
+    if (currentStreak === 0){
         document.getElementById('streakDisplay').textContent = 'You have never solved R6dle';
-    } else if (currentStreak == 1){
+    } else if (currentStreak === 1){
         document.getElementById('streakDisplay').textContent = 'You have solved this r6dle 1 time already';
     } else if (currentStreak > 1){
         document.getElementById('streakDisplay').textContent = `You have solved it ${currentStreak} times already`;
@@ -704,9 +664,9 @@ function displayDailyStreak() {
         dailyStreak = 0;
     }
     // Display the daily streak
-    if (dailyStreak == 0){
+    if (dailyStreak === 0){
         document.getElementById('dailyStreakDisplay').textContent = 'You have no daily streak';
-    } else if (dailyStreak == 1){
+    } else if (dailyStreak === 1){
         document.getElementById('dailyStreakDisplay').textContent = 'Your daily streak is: 1';
     } else if (dailyStreak > 1){
         document.getElementById('dailyStreakDisplay').textContent = `Your daily streak is: ${dailyStreak}`;
@@ -723,33 +683,33 @@ function displayDailyStreak() {
 
 
 
-// Save the tried operators
+// Save the tried bosses
 function saveTriedOperators() {
   if (localStorage.getItem('mode') === 'daily') {
-    localStorage.setItem('guessedOperators', JSON.stringify(guessedOperators));
+    localStorage.setItem('guessedBosses', JSON.stringify(guessedBosses));
   }
 }
 
-// Load the tried operators
+// Load the tried bosses
 function loadTriedOperators() {
   if (localStorage.getItem('mode') === 'daily') {
     const savedTriedOperators = localStorage.getItem('guessedOperators');
 
     if (savedTriedOperators) {
-      guessedOperators = JSON.parse(savedTriedOperators);
+      guessedBosses = JSON.parse(savedTriedOperators);
     } else {
-      guessedOperators = [];
+      guessedBosses = [];
     }
-    // Dispatch a custom event when guessedOperators is loaded
+    // Dispatch a custom event when guessedBosses is loaded
     window.dispatchEvent(new Event('guessedOperatorsLoaded'));
   }else{
-    guessedOperators = [];
+    guessedBosses = [];
     window.dispatchEvent(new Event('guessedOperatorsLoaded'));
   }
 }
 function clearGuessedOperators() {
     if (localStorage.getItem('mode') === 'daily') {
-      localStorage.removeItem('guessedOperators');
+      localStorage.removeItem('guessedBosses');
     }
   }
 function checkWin() {
@@ -781,17 +741,17 @@ function setGuesses() {
         }
     }
 }
-// Select a random operator or take the daily
+// Select a random boss or take the daily
 function setOperatorToGuess() {
     let operatorToGuess;
 
     if (localStorage.getItem('mode') === 'endless'){
         operatorToGuess = localStorage.getItem('operatorToGuess');
         if(!operatorToGuess || !operatorToGuess.length){
-            operatorToGuess = operators[Math.floor(Math.random() * operators.length)];
+            operatorToGuess = bosses[Math.floor(Math.random() * bosses.length)];
         }
     } else if (localStorage.getItem('mode') === 'daily'){
-        operatorToGuess = operator[0];
+        operatorToGuess = boss[0];
     }
 
     return operatorToGuess;
@@ -829,8 +789,8 @@ function restartButton() {
     if (restartButton) {
         // Add a click event listener to the button
         restartButton.addEventListener('click', function() {
-            guessedOperators = []
-            operatorToGuess = setOperatorToGuess()
+            guessedBosses = []
+            bossToGuess = setOperatorToGuess()
             endlessGuesses = 0
             let input  = document.getElementById('inputField')
                     input.disabled = false
@@ -877,7 +837,7 @@ function fetchDailyData() {
     fetch('../../server/dailysolved.php')
         .then(response => response.json())
         .then(data => {
-            document.getElementById('alreadyDailySolved').innerHTML = data + ' people already found the operator';
+            document.getElementById('alreadyDailySolved').innerHTML = data + ' people already found the boss';
         })
         .catch(error => console.error('Error:', error));
 }
@@ -902,8 +862,8 @@ function fetchEndlessSolved() {
 }
 
 export function getGuessedOperators() {
-    if (guessedOperators === null) {
-        guessedOperators = [];
+    if (guessedBosses === null) {
+        guessedBosses = [];
     }
-    return guessedOperators;
+    return guessedBosses;
 }

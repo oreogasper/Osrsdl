@@ -1,11 +1,13 @@
 [
   {
-    "Name": "Ahrim the Blighted",
-    "Solo Level": 98,
-    "Hitpoints": 100,
-    "Attack style": ["Magic"],
-    "Release Year": 2005,
-    "Region": "Morytania",
-    "Solo": "Yes"
+    "name": "Ahrim the Blighted",
+    "solo_level": "98",
+    "hitpoints": "100",
+    "attack_style": [
+      "Magic"
+    ],
+    "release_year": "2005",
+    "region": "Morytania",
+    "solo": "Yes"
   }
 ]
