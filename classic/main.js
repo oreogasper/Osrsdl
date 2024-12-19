@@ -196,18 +196,18 @@ window.dailyMode = function () {
             localStorage.setItem('endlessGuesses', endlessGuesses)
         }
         console.log('daily: ' + dailyGuesses + '  endless: ' + endlessGuesses)
-        // Find the operator in the list
-        const operator = operators.find(op => typeof op.name === 'string' && op.name.toLowerCase() === operatorName.toLowerCase());
-        compareOperators(operator,operatorToGuess)
+        // Find the boss in the list
+        const boss = operators.find(op => typeof op.name === 'string' && op.name.toLowerCase() === operatorName.toLowerCase());
+        compareOperators(boss,operatorToGuess)
         // Debugging output
-        console.log("Found operator:", operator);
-        // If the operator is not found, it's a wrong guess
-        if (!operator) {
+        console.log("Found boss:", boss);
+        // If the boss is not found, it's a wrong guess
+        if (!boss) {
             console.log("🔴 Operator not found");
             return askForGuess();
         }
 
-        // Compare the operator data with the selected operator
+        // Compare the boss data with the selected boss
         const keys = ["name","gender", "role", "side", "country", "Org", "Squad", "release_year"];
         let sharedCriteria = false;
 
@@ -215,44 +215,44 @@ window.dailyMode = function () {
 
         keys.forEach(key => {
             if (key === 'release_year') {
-                if (operator[key] < operatorToGuess[key]) {
-                    console.log(`⬆️ ${key}: ${operator[key]}`);
-                } else if (operator[key] > operatorToGuess[key]) {
-                    console.log(`⬇️ ${key}: ${operator[key]}`);
+                if (boss[key] < operatorToGuess[key]) {
+                    console.log(`⬆️ ${key}: ${boss[key]}`);
+                } else if (boss[key] > operatorToGuess[key]) {
+                    console.log(`⬇️ ${key}: ${boss[key]}`);
                 } else {
-                    console.log(`✅ ${key}: ${operator[key]}`);
+                    console.log(`✅ ${key}: ${boss[key]}`);
                 }
-            } else if (Array.isArray(operator[key]) && Array.isArray(operatorToGuess[key])) {
-                const normalizedOperatorRole = normalizeRoles(operator[key].join(','));
+            } else if (Array.isArray(boss[key]) && Array.isArray(operatorToGuess[key])) {
+                const normalizedOperatorRole = normalizeRoles(boss[key].join(','));
                 const normalizedOperatorToGuessRole = normalizeRoles(operatorToGuess[key].join(','));
 
                 if (normalizedOperatorRole === normalizedOperatorToGuessRole) {
-                    console.log(`✅ ${key}: ${operator[key].join(", ")}`);
+                    console.log(`✅ ${key}: ${boss[key].join(", ")}`);
                     sharedCriteria = true;
                 } else {
-                    const matchingRoles = operator[key].filter(role => normalizedOperatorToGuessRole.includes(role));
+                    const matchingRoles = boss[key].filter(role => normalizedOperatorToGuessRole.includes(role));
 
                     if (matchingRoles.length > 0) {
-                        console.log(`🟠 ${key}: ${operator[key].join(", ")}`);
+                        console.log(`🟠 ${key}: ${boss[key].join(", ")}`);
                         sharedCriteria = true;
                     } else {
-                        console.log(`🔴 ${key}: ${operator[key].join(", ")}`);
+                        console.log(`🔴 ${key}: ${boss[key].join(", ")}`);
                     }
                 }
-            } else if (key === 'country' && operator[key] !== operatorToGuess[key] && countryToContinent[operator[key]] === countryToContinent[operatorToGuess[key]]) {
-                console.log(`🟠 ${key}: ${operator[key]}`);
+            } else if (key === 'country' && boss[key] !== operatorToGuess[key] && countryToContinent[boss[key]] === countryToContinent[operatorToGuess[key]]) {
+                console.log(`🟠 ${key}: ${boss[key]}`);
                 sharedCriteria = true;
-            } else if (typeof operator[key] === 'string' && operator[key] === operatorToGuess[key]) {
-                console.log(`✅ ${key}: ${operator[key]}`);
+            } else if (typeof boss[key] === 'string' && boss[key] === operatorToGuess[key]) {
+                console.log(`✅ ${key}: ${boss[key]}`);
                 sharedCriteria = true;
             } else {
-                console.log(`🔴 ${key}: ${operator[key]}`);
+                console.log(`🔴 ${key}: ${boss[key]}`);
             }
         });
 
-        // Check if the operator name is fully guessed
+        // Check if the boss name is fully guessed
         if (operatorName.toLowerCase() === operatorToGuess.name.toLowerCase()) {
-            console.log("You won! The operator was " + operatorToGuess.name );
+            console.log("You won! The boss was " + operatorToGuess.name );
             if(localStorage.getItem('mode') === 'daily'){
                 localStorage.setItem('dailyWon', 'true')
                 localStorage.setItem('lastGuessedOp', operatorName)
@@ -261,9 +261,9 @@ window.dailyMode = function () {
 
         } else {
             if (sharedCriteria) {
-                console.log("🟠 The guessed operator shares some criteria with the operator to find.");
+                console.log("🟠 The guessed boss shares some criteria with the boss to find.");
             } else {
-                console.log("🔴 The guessed operator does not share any criteria with the operator to find.");
+                console.log("🔴 The guessed boss does not share any criteria with the boss to find.");
             }
             saveTriedOperators();
             askForGuess();
@@ -399,7 +399,7 @@ window.dailyMode = function () {
 
 
         // Get the first object from the output
-        let result = operator;
+        let result = boss;
 
        // Create a new row
     let row = document.createElement('div');

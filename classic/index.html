@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <noscript>
-    Your browser does not support JavaScript or it is disabled! Please enable JavaScript for this website to function properly.
+        Your browser does not support JavaScript or it is disabled! Please enable JavaScript for this website to function properly.
     </noscript>
 <head>
     <title>Osrsdle</title>
@@ -39,7 +39,7 @@
             <div class="current-streak animate__animated animate__fadeIn streak-clickable has-tooltip">
                 <div id="mode-indicator">
                     <button id="dailyModeButton" class="de_button" onclick="dailyMode()"> Daily Mode </button>
-                    <button id="endlessModeButton" class="de_button" onclick="endlessMode()"> Endless Mode </button>
+                    <!--<button id="endlessModeButton" class="de_button" onclick="endlessMode()"> Endless Mode </button>-->
                 </div>
                 <br>
                 <div class="streak-value streak-value-1" id="streakDisplay"></div>
@@ -52,7 +52,7 @@
                 <div class="answers">
                     <div class="search-box">
                         <div class="searchBar">
-                            <input id="inputField" autocomplete="off" type="text" placeholder="Type operator name..." class="searchbar">
+                            <input id="inputField" autocomplete="on" type="text" placeholder="Type a boss name..." class="searchbar">
                             <button id="submitButton"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                         <div id="auto-boxField" class="auto-box">
@@ -81,7 +81,7 @@
                                 <div class="square-content"> Attack Style </div>
                             </div>
                             <div class="square square-title">
-                                <div class="square-content">  Solo Only </div>
+                                <div class="square-content"> Solo Only </div>
                             </div>
                             <div class="square square-title">
                                 <div class="square-content"> Release Year </div>
@@ -101,7 +101,7 @@
 
                             <div class="tuto-row-container">
                                 <div>
-                                    <img src="https://gclabels.net/image/cache/data/new/inv/new/Blank-Fluorescent-Green-Square-Labels-s1g-600x600.png" width="30px">
+                                    <img src="/images/webicons/green-square.png" width="30px">
                                 </div>
                                 <div>Correct</div>
                             </div>
@@ -109,16 +109,25 @@
                                 <div>
                                     <img src="https://pitshanger-ltd.co.uk/images/colours/508-TL_Orange.jpg" width="30px">
                                 </div>
-                                <div>Partially</div>
-                                <div>country means </div>
-                                <div>the continent </div>
-                                <div>is right</div>
+                                <div>Partial</div>
                             </div>
                             <div class="tuto-row-container">
                                 <div>
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Redsquare.png" width="30px">
                                 </div>
                                 <div>Incorrect</div>
+                            </div>
+                            <div class="tuto-row-container">
+                                <div>
+                                    <img src="/images/webicons/higher-arrow.png" width="30px">
+                                </div>
+                                <div>Higher</div>
+                            </div>
+                            <div class="tuto-row-container">
+                                <div>
+                                    <img src="/images/webicons/lower-arrow.png" width="30px">
+                                </div>
+                                <div>Lower</div>
                             </div>
                         </div>
                     </div>
@@ -136,5 +145,3 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
-
-</html>
