@@ -1,77 +1,82 @@
-//import bosses from './bosses.json' with {type:'json'}
-import {bosses} from './main.js';
-import { getGuessedOperators } from './main.js';
-let lowerCaseGuessedOperators
-let matchingNames
-window.addEventListener('guessedOperatorsLoaded', function() {
-    // Now you can access the loaded guessedOperators
+// Import bosses and functions
+import { bosses } from './main.js';
+import { getGuessedbosses } from './main.js';
+
+let lowerCaseGuessedOperators;
+let matchingNames;
+
+window.addEventListener('guessedOperatorsLoaded', function () {
+    // Autocomplete ready
     console.log('autocomplete is ready');
 
-// Get a list of operator names
-let availableNames = bosses.map(operator => operator.name);
-let usedNames = []; // List of used names
-window.addEventListener('clearUsedNames', function() {
-  usedNames = [];
-  return usedNames
-}); 
-const autoBox = document.querySelector(".auto-box");
-const inputBox = document.getElementById("inputField");
+    // Get a list of operator names
+    let availableNames = bosses.map(operator => operator.name);
+    let usedNames = []; // List of used names
 
-var nameMapping = {
-    'Jäger': 'Jager',
-    'Nøkk': 'Nokk',
-    'Capitão': 'Capitao',
-    'Tubarão': 'Tubarao'
-  };
-// Get the input field and results container
-let inputField = document.getElementById('inputField');
-let resultsContainer = document.getElementById('output');
+    // Clear used names on custom event
+    window.addEventListener('clearUsedNames', function () {
+        usedNames = [];
+        return usedNames;
+    });
 
+    // DOM elements
+    const autoBox = document.querySelector('.auto-box');
+    const inputField = document.getElementById('inputField');
+    const resultsContainer = document.getElementById('output');
+    const searchButton = document.getElementById('searchButton'); // Assuming this exists in your HTML
 
-    
-if(inputField !== ''){
-    // Add an input event listener to the input field
-inputField.addEventListener('input', () => {
-    // Get the current value of the input field
-    let inputValue = inputField.value;
-  
-    // Clear the results container
-    resultsContainer.innerHTML = '';
-  
-    // Only display the matching bosses if the input field is not empty
-    if (inputValue !== '') {
-      // Filter the names based on the input value and exclude used names
-      
-      lowerCaseGuessedOperators = getGuessedOperators().map(operator => operator.toLowerCase());
-      matchingNames = availableNames.filter(name => {
-        // Get the name without special characters
-        var nameWithoutSpecialCharacters = nameMapping[name] || name;
-  
-        return (
-          (name.toLowerCase().startsWith(inputValue.toLowerCase()) ||
-          nameWithoutSpecialCharacters.toLowerCase().startsWith(inputValue.toLowerCase())) &&
-          !usedNames.includes(name.toLowerCase()) &&
-          !lowerCaseGuessedOperators.includes(name.toLowerCase())
-        );
-      });
-  
-      display(matchingNames);
-    } else {
-      // Clear the autoBox when the input field is empty
-      autoBox.innerHTML = '';
+    if (inputField) {
+        // Add an input event listener to the input field
+        inputField.addEventListener('input', () => {
+            let inputValue = inputField.value.trim(); // Trim to remove extra spaces
+
+            // Clear the results container
+            resultsContainer.innerHTML = '';
+
+            // Only display matching bosses if the input field is not empty
+            if (inputValue) {
+                lowerCaseGuessedOperators = getGuessedbosses().map(operator => operator.toLowerCase());
+                matchingNames = availableNames.filter(name => {
+                    return (
+                        name.toLowerCase().startsWith(inputValue.toLowerCase()) &&
+                        !usedNames.includes(name.toLowerCase()) &&
+                        !lowerCaseGuessedOperators.includes(name.toLowerCase())
+                    );
+                });
+
+                display(matchingNames);
+            } else {
+                // Clear the autoBox when the input field is empty
+                autoBox.innerHTML = '';
+            }
+        });
     }
-  });
-}
 
-function display(result){
-    const content =
-        result.map(name => `<li class="operator-suggestion" onclick="selectInput(this)"><img src="../images/mobs/r6s-operators-badge-${name.toLowerCase()}.png" class="operator-image">${name}</li>`).join('');
-    autoBox.innerHTML = `<ul>${content}</ul>`;
-}
+    // Display matching results in the autoBox
+    function display(result) {
+        const content = result
+            .map(
+                name =>
+                    `<li class="operator-suggestion" onclick="selectInput(this)">
+                        <img src="../images/mobs/${name.replace(/ /g, '_')}.png" class="operator-image">
+                        ${name}
+                    </li>`
+            )
+            .join('');
+        autoBox.innerHTML = `<ul>${content}</ul>`;
+    }
 
-window.selectInput = function(list) {
-    inputField.value = list.textContent; // Use textContent instead of innerHTML
-    autoBox.innerHTML = '';
-    usedNames.push(list.textContent.toLowerCase()); // Add the used name to the list
-}
+    // Handle selection of a suggestion
+    window.selectInput = function (list) {
+        inputField.value = list.textContent.trim(); // Autofill input field
+        autoBox.innerHTML = ''; // Clear suggestions
+        usedNames.push(list.textContent.trim().replace(/ /g, '_')); // Add used name
+
+        // Trigger search or further processing
+        if (searchButton) {
+            searchButton.click(); // Simulate clicking the search button
+        } else {
+            console.warn('Search button not found. Trigger custom logic here.');
+        }
+    };
 });

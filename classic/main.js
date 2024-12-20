@@ -156,7 +156,6 @@ window.dailyMode = function () {
     clear();
     if(localStorage.getItem('dailyWon') === 'true'){
         displayWinningScreen()
-
     }
 
     //Use guess and askForGuess as needed
@@ -179,13 +178,14 @@ function guess(bossName) {
     }
 
     console.log("Found boss:", boss);
+
     compareBosses(boss, bossToGuess);
 
     if (bossName.toLowerCase() === bossToGuess.name.toLowerCase()) {
         handleWinning(bossName, mode);
     } else {
         handleGuessFeedback(boss, bossToGuess);
-        compareOperators(boss, bossToGuess); // Compare visually
+        compareOperators(boss, bossToGuess, bossName.replace(/ /g, '_')); // Compare visually
         saveTriedOperators();
         askForGuess();
     }
@@ -270,8 +270,7 @@ function logComparison(isVisual, key, value, squareClass, icon) {
     }
 }
 
-function compareOperators(boss, bossToGuess) {
-    // 🟢 Neon Green: Added operator comparison and UI logic
+function compareOperators(boss, bossToGuess, scoredName) {
     const keys = ["name", "solo_level", "hitpoints", "attack_style", "release_year", "region", "solo"];
     let sharedCriteria = false;
 
@@ -287,7 +286,8 @@ function compareOperators(boss, bossToGuess) {
     imgSquare.className = 'square animate__animated animate__flipInY';
 
     let img = document.createElement('img');
-    img.src = `../images/mobs/ahrim.png`; // Placeholder image logic
+    img.src = `../images/mobs/${scoredName}.png`; // Placeholder image logic
+    console.log(scoredName);
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';
@@ -363,25 +363,6 @@ function handleGuessFeedback(boss, bossToGuess) {
     }
 }
 
-/*
-function createResultRow(boss, keys, resultsContainer) {
-    // 🟢 Neon Green: Logic for creating a new row and appending to the results container
-    let row = document.createElement('div');
-    row.className = 'resultRow';
-
-    // Create boxes for the different keys
-    keys.forEach(key => {
-        let box = document.createElement('div');
-        box.className = 'resultBox';
-        box.textContent = boss[key]; // Populate the box with the boss data for the key
-        row.appendChild(box);
-    });
-
-    // Append the row to the results container
-    resultsContainer.appendChild(row);
-}*/
-
-
 function displayWinningScreen() {
     if(localStorage.getItem('mode') === 'daily'){
         if(localStorage.getItem('dailyWon') === 'true'){
@@ -419,11 +400,8 @@ function displayWinningScreen() {
     img.height = 60;
     img.className = "gg-icon";
     img.className = "gg-icon";
-    var operatorName = bossToGuess.name;
-    img.src = `../images/r6s-operators-badge-${operatorName.toLowerCase()}.png`;
+    img.src = `../images/mobs/${bossToGuess.name.replace(/ /g, '_')}.png`;
     firstInnerDiv.appendChild(img);
-
-
 
     // Create the second inner div
     let secondInnerDiv = document.createElement('div');
@@ -443,7 +421,6 @@ function displayWinningScreen() {
     ggNameDiv.className = 'gg-name';
     ggNameDiv.innerHTML = bossToGuess.name; // Replace with the actual boss name
     secondInnerDiv.appendChild(ggNameDiv); // Append the gg-name div to the second inner div
-
 
     // Create the nthtries div
     let nthTriesDiv = document.createElement('div');
@@ -477,8 +454,6 @@ function displayWinningScreen() {
     countdownTime.className = 'modal-time';
     countdownTime.id = 'countdown';
     countdown.appendChild(countdownTime);
-
-
 
     // Update the countdown every 1 second
     let countdownInterval = setInterval(function() {
@@ -522,73 +497,45 @@ function displayWinningScreen() {
     restartButton();
 }
 
-
-
-
-
 function askForGuess() {
-    // Get the button element
-    var submitButton = document.getElementById('submitButton');
-    // Create an array of boss names
-    var bossNames = bosses.map(function(boss) {
-        return boss.name;
-    });
-    // Get the input field element
-    var autobox = document.querySelector(".auto-box");
+    // Get the button and input field elements
+    const submitButton = document.getElementById('submitButton');
+    const inputField = document.getElementById('inputField');
+    const autobox = document.querySelector(".auto-box");
 
-    // Add a click event listener to the input field
-    autobox.addEventListener('click', function() {
-            // Get the input field element
-            var inputField = document.getElementById('inputField');
-             // Select the input field content
-             inputField.select();
+    // Create a set of boss names for faster lookups
+    const bossNamesSet = new Set(bosses.map(boss => boss.name));
 
-             // Get the input field value
-             var userInput = inputField.value;
+    // Function to handle user input validation and guessing logic
+    function handleGuess() {
+        const userInput = inputField.value.trim(); // Trim whitespace
 
-             // Check if the boss has already been guessed or empty or does not exist
-            if (guessedBosses.includes(userInput) || userInput === "") {
-                console.log('This boss has already been guessed.');
-                return; // Exit the function early
-            } else if (userInput === "") {
+        // Validation checks
+        if (guessedBosses.includes(userInput)) {
+            console.log('This boss has already been guessed.');
+            return;
+        }
+        if (userInput === "") {
             console.log('InputField was empty.');
             return;
-            } else if (!bossNames.includes(userInput)) {
+        }
+        if (!bossNamesSet.has(userInput)) {
             console.log('This boss does not exist.');
             return;
-            }
-
-             // Add the boss to the array of guessed bosses
-             guessedBosses.push(userInput);
-
-             // Now you can use the userInput value in your code
-             guess(userInput);
-    });
-
-    // Add a click event listener to the button
-    submitButton.addEventListener('click', function() {
-        // Get the input field value
-        var userInput = inputField.value;
-
-        // Check if the boss has already been guessed or empty or does not exist
-        if (guessedBosses.includes(userInput) || userInput === "") {
-            console.log('This boss has already been guessed.');
-            return; // Exit the function early
-        } else if (userInput === "") {
-           console.log('InputField was empty.');
-           return;
-        } else if (!bossNames.includes(userInput)) {
-           console.log('This boss does not exist.');
-           return;
         }
 
-        // Add the boss to the array of guessed bosses
+        // Add the boss to the guessed list and process the guess
         guessedBosses.push(userInput);
-
-        // Now you can use the userInput value in your code
         guess(userInput);
-    });
+    }
+
+    // Add event listener to autobox for input field selection
+    autobox.addEventListener('click', () => inputField.select());
+
+    // Add event listeners for both button and input actions
+    submitButton.addEventListener('click', handleGuess);
 }
+
 
 // When a user solves a problem
 function problemSolved() {
@@ -648,8 +595,6 @@ function displayStreak() {
 
     dataGlobalSolvedEndless.style.display = ''
     dataGlobalSolvedEndless.innerHTML = 'The endless mode was already solved times'
-
-
 }
 
 function displayDailyStreak() {
@@ -680,9 +625,6 @@ function displayDailyStreak() {
     dataDailyStreak.style.display = ''
 }
 
-
-
-
 // Save the tried bosses
 function saveTriedOperators() {
   if (localStorage.getItem('mode') === 'daily') {
@@ -707,11 +649,13 @@ function loadTriedOperators() {
     window.dispatchEvent(new Event('guessedOperatorsLoaded'));
   }
 }
+
 function clearGuessedOperators() {
     if (localStorage.getItem('mode') === 'daily') {
       localStorage.removeItem('guessedBosses');
     }
   }
+
 function checkWin() {
     var userHasWon = localStorage.getItem('dailyWon') === 'true'
     var dailyStreakCount = localStorage.getItem('dailyStreakCount')
@@ -741,6 +685,7 @@ function setGuesses() {
         }
     }
 }
+
 // Select a random boss or take the daily
 function setOperatorToGuess() {
     let operatorToGuess;
@@ -822,9 +767,6 @@ function clear() {
 }
 
 
-
-
-
 // Call this function whenever a quiz is solved
 function incrementSolvedCount() {
     fetch('../../server/datup.php')
@@ -861,7 +803,7 @@ function fetchEndlessSolved() {
         .catch(error => console.error('Error:', error));
 }
 
-export function getGuessedOperators() {
+export function getGuessedbosses() {
     if (guessedBosses === null) {
         guessedBosses = [];
     }

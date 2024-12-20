@@ -47,7 +47,6 @@ button .fa-solid{
     text-shadow: .8px 0.8px 0 #ffffff, -.5px .5px 0 #ffffff, -.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff;
   }
 
-
 .auto-box ul{
     border-top: 1px solid #999;
     padding: 15px 10px;
@@ -84,9 +83,6 @@ button .fa-solid{
     margin: 0px 0px 0px 5%;
     width: 50%;
 }
-
-
-
 
 .answer-titles {
     display: flex;
@@ -153,11 +149,20 @@ button .fa-solid{
 }
 
 .answers-container {
-    width: 100%;
+    padding: 0;
+    margin: 0 auto; /* Centers horizontally */
+    width: auto; /* Allow natural width of content */
+    display: flex; /* Enables flexbox behavior for children */
+    flex-direction: column; /* Stack rows vertically */
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+
+    /*width: 100%;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column-reverse;*/
 }
 .classic-answer {
+
     margin-bottom: 0.5rem;
     width: 100%;
 }
@@ -170,14 +175,6 @@ button .fa-solid{
     backface-visibility: visible !important;
     -webkit-animation-name: flipInY;
     animation-name: flipInY;
-}
-.animate__animated {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-duration: var(--animate-duration);
-    animation-duration: var(--animate-duration);
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
 }
 .animate__animated {
     -webkit-animation-duration: 1s;
@@ -1120,6 +1117,7 @@ button .fa-solid{
         margin: 0 auto; /* Centers horizontally */
         width: auto; /* Allow natural width of content */
         display: flex; /* Enables flexbox behavior for children */
+        flex-direction: column; /* Stack rows vertically */
         justify-content: center; /* Center children horizontally */
         align-items: center; /* Center children vertically */
     }
