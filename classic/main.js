@@ -146,13 +146,12 @@ window.dailyMode = function () {
     }
     // Logic for daily mode
     updateModeIndicator('Daily');
-    //console.log("Now daily mode")
     localStorage.setItem('mode', 'daily');
     displayDailyStreak();
     dailyGuesses = setDailyGuesses();
     bossToGuess = setOperatorToGuess();
-    var event = new CustomEvent('clearUsedNames');
-            window.dispatchEvent(event);
+    const event = new CustomEvent('clearUsedNames');
+    window.dispatchEvent(event);
     clear();
     if(localStorage.getItem('dailyWon') === 'true'){
         displayWinningScreen()
