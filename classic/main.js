@@ -14,8 +14,6 @@ window.onload = async function() {
     bosses = await operatorsResponse.json()
     lastSolvedTimestamp = localStorage.getItem('lastSolvedTimestamp')
 
-    //console.log(boss)
-    //console.log(bosses)
     loadTriedOperators()
 
     // Get the saved mode from localStorage
@@ -473,8 +471,8 @@ function displayWinningScreen() {
     if (localStorage.getItem('mode') === 'daily') {
         const nextTime = getNextMidnightEST();
         startCountdown(nextTime, countdownTime);
-        console.log("Next Midnight EST:", new Date(getNextMidnightEST()));
     }
+
 
     ggAnswerDiv.appendChild(firstInnerDiv);
     ggAnswerDiv.appendChild(secondInnerDiv);
