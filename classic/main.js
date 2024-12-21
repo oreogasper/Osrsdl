@@ -365,10 +365,20 @@ function handleGuessFeedback(boss, bossToGuess) {
 // Helper function to calculate the next midnight EST
 function getNextMidnightEST() {
     const now = new Date();
-    const offset = now.getTimezoneOffset() === 240 ? 4 : 5; // Check for DST
-    const nextMidnight = new Date(now);
-    nextMidnight.setUTCHours(24 + offset, 0, 0, 0); // Set to next midnight in EST
-    return nextMidnight.getTime();
+
+    // Get the current UTC time
+    const utcNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+
+    // Set UTC midnight
+    const utcMidnight = new Date(utcNow);
+    utcMidnight.setUTCHours(24, 0, 0, 0);
+
+    // Adjust for EST (UTC-5 or UTC-4 for DST)
+    const isDST = now.getTimezoneOffset() < 300; // DST active if offset < 300
+    const estOffset = isDST ? 4 : 5; // UTC-4 for DST, UTC-5 otherwise
+    utcMidnight.setHours(utcMidnight.getHours() - estOffset);
+
+    return utcMidnight.getTime();
 }
 
 // Countdown logic function
@@ -463,6 +473,7 @@ function displayWinningScreen() {
     if (localStorage.getItem('mode') === 'daily') {
         const nextTime = getNextMidnightEST();
         startCountdown(nextTime, countdownTime);
+        console.log("Next Midnight EST:", new Date(getNextMidnightEST()));
     }
 
     ggAnswerDiv.appendChild(firstInnerDiv);
