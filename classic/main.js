@@ -126,7 +126,7 @@ function updateModeIndicator(mode) {
     localStorage.setItem('mode', 'endless');
     displayStreak();
     endlessGuesses = setEndlessGuesses();
-    bossToGuess = setOperatorToGuess();
+    bossToGuess = setBossToGuess();
     loadTriedOperators()
     var event = new CustomEvent('clearUsedNames');
             window.dispatchEvent(event);
@@ -149,7 +149,7 @@ window.dailyMode = function () {
     localStorage.setItem('mode', 'daily');
     displayDailyStreak();
     dailyGuesses = setDailyGuesses();
-    bossToGuess = setOperatorToGuess();
+    bossToGuess = setBossToGuess();
     const event = new CustomEvent('clearUsedNames');
     window.dispatchEvent(event);
     clear();
@@ -362,139 +362,128 @@ function handleGuessFeedback(boss, bossToGuess) {
     }
 }
 
-function displayWinningScreen() {
-    if(localStorage.getItem('mode') === 'daily'){
-        if(localStorage.getItem('dailyWon') === 'true'){
-            dailyResult = localStorage.getItem('dailyResult')
-        }
-    }
-    // Get the endId element
-    let endId = document.getElementById('endId');
+// Helper function to calculate the next midnight EST
+function getNextMidnightEST() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() === 240 ? 4 : 5; // Check for DST
+    const nextMidnight = new Date(now);
+    nextMidnight.setUTCHours(24 + offset, 0, 0, 0); // Set to next midnight in EST
+    return nextMidnight.getTime();
+}
 
-    // Create the finished div
+// Countdown logic function
+function startCountdown(nextTime, countdownTime) {
+    let countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = nextTime - now;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            countdownTime.innerHTML = "Refresh the site to get the new boss";
+            return;
+        }
+
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownTime.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+}
+
+function displayWinningScreen() {
+    if (localStorage.getItem('mode') === 'daily' && localStorage.getItem('dailyWon') === 'true') {
+        dailyResult = localStorage.getItem('dailyResult');
+    }
+
+    let endId = document.getElementById('endId');
     let finishedDiv = document.createElement('div');
     finishedDiv.className = 'finished';
 
-    // Create the empty div
     let emptyDiv = document.createElement('div');
-
-    // Create the background-end div
     let backgroundEndDiv = document.createElement('div');
     backgroundEndDiv.className = 'background-end';
 
-    // Create the gg div
     let ggDiv = document.createElement('div');
     ggDiv.className = 'gg';
     ggDiv.innerHTML = 'gg wp';
 
-    // Create the gg-answer div
     let ggAnswerDiv = document.createElement('div');
     ggAnswerDiv.className = 'gg-answer';
 
-    // Create the first inner div
     let firstInnerDiv = document.createElement('div');
-    // Create the img
     let img = document.createElement('img');
     img.width = 60;
     img.height = 60;
     img.className = "gg-icon";
-    img.className = "gg-icon";
     img.src = `../images/mobs/${bossToGuess.name.replace(/ /g, '_')}.png`;
     firstInnerDiv.appendChild(img);
 
-    // Create the second inner div
     let secondInnerDiv = document.createElement('div');
-
-    // Create the gg-you span
     let ggYouSpan = document.createElement('span');
     ggYouSpan.className = 'gg-you';
     ggYouSpan.innerHTML = 'You guessed';
-    secondInnerDiv.appendChild(ggYouSpan); // Append the gg-you span to the second inner div
+    secondInnerDiv.appendChild(ggYouSpan);
 
-    // Create the br
     let br = document.createElement('br');
-    secondInnerDiv.appendChild(br); // Append the br to the second inner div
+    secondInnerDiv.appendChild(br);
 
-    // Create the gg-name div
     let ggNameDiv = document.createElement('div');
     ggNameDiv.className = 'gg-name';
-    ggNameDiv.innerHTML = bossToGuess.name; // Replace with the actual boss name
-    secondInnerDiv.appendChild(ggNameDiv); // Append the gg-name div to the second inner div
+    ggNameDiv.innerHTML = bossToGuess.name;
+    secondInnerDiv.appendChild(ggNameDiv);
 
-    // Create the nthtries div
     let nthTriesDiv = document.createElement('div');
     nthTriesDiv.className = 'nthtries';
     nthTriesDiv.innerHTML = 'Number of tries: ';
 
-    // Create the nth span
     let nthSpan = document.createElement('span');
     nthSpan.className = 'nth';
-    if(localStorage.getItem('mode') === 'daily'){
-        nthSpan.innerHTML = dailyResult
-    } else if(localStorage.getItem('mode') === 'endless'){
-        nthSpan.innerHTML = endlessResult
-    }
+    nthSpan.innerHTML = localStorage.getItem('mode') === 'daily' ? dailyResult : endlessResult;
+    nthTriesDiv.appendChild(nthSpan);
 
-    let button = document.createElement('button')
-    button.className = 'de_button'
-    button.innerHTML = 'Restart'
-    button.id = 'restartButton'
+    let button = document.createElement('button');
+    button.className = 'de_button';
+    button.innerHTML = 'Restart';
+    button.id = 'restartButton';
 
-    // Create the countdown and append it to the DOM
     let countdown = document.createElement('div');
     countdown.className = 'next-boss next-boss';
 
     let nextTitle = document.createElement('div');
     nextTitle.className = 'next-title';
+    nextTitle.innerHTML = 'Next boss in:';
     countdown.appendChild(nextTitle);
-    nextTitle.innerHTML = 'Next boss in:'
 
     let countdownTime = document.createElement('div');
     countdownTime.className = 'modal-time';
     countdownTime.id = 'countdown';
     countdown.appendChild(countdownTime);
 
-    // Update the countdown every 1 second
-    let countdownInterval = setInterval(function() {
-        // Get today's date and time
-        var now = new Date().getTime();
+    if (localStorage.getItem('mode') === 'daily') {
+        const nextTime = getNextMidnightEST();
+        startCountdown(nextTime, countdownTime);
+    }
 
-        // Find the distance between now and the count down date
-        var distance = nextTime - now;
-
-        // Time calculations for days, hours, minutes and seconds
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Update the countdownTime innerHTML
-        countdownTime.innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
-
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(countdownInterval);
-            countdownTime.innerHTML = "Refresh the site to get the new boss";
-        }
-    }, 1000);
-
-    // Append the elements to their parents
     ggAnswerDiv.appendChild(firstInnerDiv);
     ggAnswerDiv.appendChild(secondInnerDiv);
     backgroundEndDiv.appendChild(ggDiv);
     backgroundEndDiv.appendChild(ggAnswerDiv);
     backgroundEndDiv.appendChild(nthTriesDiv);
-    if (localStorage.getItem('mode') === 'endless'){
-        backgroundEndDiv.appendChild(button)
+
+    if (localStorage.getItem('mode') === 'endless') {
+        backgroundEndDiv.appendChild(button);
+    } else if (localStorage.getItem('mode') === 'daily') {
+        backgroundEndDiv.appendChild(countdown);
     }
-    if(localStorage.getItem('mode') === 'daily'){
-        backgroundEndDiv.appendChild(countdown)
-    }
-    nthTriesDiv.appendChild(nthSpan);
+
     emptyDiv.appendChild(backgroundEndDiv);
     finishedDiv.appendChild(emptyDiv);
     endId.appendChild(finishedDiv);
     restartButton();
 }
+
+
 
 function askForGuess() {
     // Get the button and input field elements
@@ -686,19 +675,17 @@ function setGuesses() {
 }
 
 // Select a random boss or take the daily
-function setOperatorToGuess() {
-    let operatorToGuess;
-
+function setBossToGuess() {
+    let bossToGuess;
     if (localStorage.getItem('mode') === 'endless'){
-        operatorToGuess = localStorage.getItem('operatorToGuess');
-        if(!operatorToGuess || !operatorToGuess.length){
-            operatorToGuess = bosses[Math.floor(Math.random() * bosses.length)];
+        bossToGuess = localStorage.getItem('operatorToGuess');
+        if(!bossToGuess || !bossToGuess.length){
+            bossToGuess = bosses[Math.floor(Math.random() * bosses.length)];
         }
     } else if (localStorage.getItem('mode') === 'daily'){
-        operatorToGuess = boss[0];
+        bossToGuess = boss[0];
     }
-
-    return operatorToGuess;
+    return bossToGuess;
 }
 
 // Set initial guess count for daily mode
@@ -734,7 +721,7 @@ function restartButton() {
         // Add a click event listener to the button
         restartButton.addEventListener('click', function() {
             guessedBosses = []
-            bossToGuess = setOperatorToGuess()
+            bossToGuess = setBossToGuess()
             endlessGuesses = 0
             let input  = document.getElementById('inputField')
                     input.disabled = false
