@@ -373,7 +373,7 @@ function getNextMidnightEST() {
 
     // Adjust for EST (UTC-5 or UTC-4 for DST)
     const isDST = now.getTimezoneOffset() < 300; // DST active if offset < 300
-    const estOffset = isDST ? 4 : 5; // UTC-4 for DST, UTC-5 otherwise
+    const estOffset = isDST ? 18 : 19; // UTC-4 for DST, UTC-5 otherwise
     utcMidnight.setHours(utcMidnight.getHours() - estOffset);
 
     return utcMidnight.getTime();
