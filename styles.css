@@ -43,7 +43,7 @@
     text-shadow: .8px 0.8px 0 #ffffff, -.5px .5px 0 #ffffff, -.5px -.5px 0 #ffffff, .5px -.5px 0 #ffffff;
 }
 body{
-    background-image: url('images/tob-background.jpg');
+    background-image: url('./images/tob-background.jpg');
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
