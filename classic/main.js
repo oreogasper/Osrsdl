@@ -558,7 +558,7 @@ function problemSolved() {
         localStorage.setItem('streak', currentStreak);
 
         // Display the new streak
-        document.getElementById('streakDisplay').textContent = `You solved R6dle already ${currentStreak} times`;
+        displayStreak()
     } else if (localStorage.getItem('mode') === 'daily'){
 
         // Increment the daily streak
@@ -574,9 +574,9 @@ function displayStreak() {
     // Get the current streak from local storage
     let currentStreak = localStorage.getItem('streak');
     // Get the 'streakDisplay' element
-    var streakDisplay = document.getElementById('streakDisplay');
-    var dataDailyStreak = document.getElementById('alreadyDailySolved');
-    var dataGlobalSolvedEndless = document.getElementById('globalSolvedEndless');
+    const streakDisplay = document.getElementById('streakDisplay');
+    const dataDailyStreak = document.getElementById('alreadyDailySolved');
+    // var dataGlobalSolvedEndless = document.getElementById('globalSolvedEndless');
 
     // Show the 'streakDisplay' element
     streakDisplay.style.display = '';
@@ -586,18 +586,16 @@ function displayStreak() {
     }
     // Display the current streak
     if (currentStreak === 0){
-        document.getElementById('streakDisplay').textContent = 'You have never solved R6dle';
-    } else if (currentStreak === 1){
-        document.getElementById('streakDisplay').textContent = 'You have solved this r6dle 1 time already';
+        document.getElementById('streakDisplay').textContent = 'You have never solved Osrsdle';
     } else if (currentStreak > 1){
-        document.getElementById('streakDisplay').textContent = `You have solved it ${currentStreak} times already`;
+        document.getElementById('streakDisplay').textContent = `You have solved Osrsdle ${currentStreak} times`;
     }
-    var dailyStreakDisplay = document.getElementById('dailyStreakDisplay');
+    const dailyStreakDisplay = document.getElementById('dailyStreakDisplay');
     dailyStreakDisplay.style.display = 'none'
     dataDailyStreak.style.display = 'none'
 
-    dataGlobalSolvedEndless.style.display = ''
-    dataGlobalSolvedEndless.innerHTML = 'The endless mode was already solved times'
+    // dataGlobalSolvedEndless.style.display = ''
+    // dataGlobalSolvedEndless.innerHTML = 'The endless mode was already solved times'
 }
 
 function displayDailyStreak() {
