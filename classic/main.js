@@ -189,7 +189,6 @@ function guess(bossName) {
     if (bossName.toLowerCase() === bossToGuess.name.toLowerCase()) {
         handleWinning(bossName, mode);
     } else {
-        handleGuessFeedback(boss, bossToGuess);
         askForGuess();
     }
 }
@@ -373,16 +372,6 @@ function handleWinning(bossName, mode) {
     displayWinningScreen();
 }
 
-function handleGuessFeedback(boss, bossToGuess) {
-    const sharedCriteria = compareBosses(boss, bossToGuess);
-
-    if (sharedCriteria) {
-        console.log("🟠 The guessed boss shares some criteria with the boss to find.");
-    } else {
-        console.log("🔴 The guessed boss does not share any criteria with the boss to find.");
-    }
-}
-
 // Helper function to calculate the next midnight EST
 function getNextMidnightEST() {
     const now = new Date();
@@ -510,7 +499,7 @@ function displayWinningScreen() {
     } else if (mode === 'endless') {
         const button = document.createElement('button');
         button.className = 'de_button';
-        button.innerHTML = 'Restart';
+        button.innerHTML = 'Play Again';
         button.id = 'restartButton';
         backgroundEndDiv.appendChild(button);
     }
@@ -536,19 +525,9 @@ function askForGuess() {
         const userInput = inputField.value.trim(); // Trim whitespace
 
         // Validation checks
-        if (guessedBosses.includes(userInput)) {
-            console.log('This boss has already been guessed.');
+        if (guessedBosses.includes(userInput) || userInput === "" || !bossNamesSet.has(userInput)) {
             return;
         }
-        if (userInput === "") {
-            console.log('InputField was empty.');
-            return;
-        }
-        if (!bossNamesSet.has(userInput)) {
-            console.log('This boss does not exist.');
-            return;
-        }
-
         // Add the boss to the guessed list and process the guess
         guessedBosses.push(userInput);
         guess(userInput);
@@ -572,10 +551,8 @@ function problemSolved() {
         if (!currentStreak) {
             currentStreak = 0;
         }
-        console.log('before solved: ' + currentStreak)
         // Increment the streak
         currentStreak++;
-        console.log('after solved: ' + currentStreak)
         // Save the new streak to local storage
         localStorage.setItem('streak', currentStreak);
 
@@ -615,9 +592,6 @@ function displayStreak() {
     const dailyStreakDisplay = document.getElementById('dailyStreakDisplay');
     dailyStreakDisplay.style.display = 'none'
     dataDailyStreak.style.display = 'none'
-
-    // dataGlobalSolvedEndless.style.display = ''
-    // dataGlobalSolvedEndless.innerHTML = 'The endless mode was already solved times'
 }
 
 function displayDailyStreak() {
@@ -687,31 +661,11 @@ function checkWin() {
     }
 }
 
-// Set initial guess count for daily and endless modes
-function setGuesses() {
-    let guesses = {
-        daily: 0,
-        endless: 0
-    };
-
-    if (localStorage.getItem('mode') === 'endless'){
-        let endlessGuesses = localStorage.getItem('guesses.endless');
-        if(!endlessGuesses){
-            localStorage.setItem('guesses.endless', guesses.endless);
-        }
-    } else if (localStorage.getItem('mode') === 'daily'){
-        let dailyGuesses = localStorage.getItem('guesses.daily');
-        if(!dailyGuesses){
-            localStorage.setItem('guesses.daily', guesses.daily);
-        }
-    }
-}
-
 // Select a random boss or take the daily
 function setBossToGuess() {
     let bossToGuess;
     if (localStorage.getItem('mode') === 'endless'){
-        bossToGuess = localStorage.getItem('operatorToGuess');
+        bossToGuess = localStorage.getItem('bossToGuess');
         if(!bossToGuess || !bossToGuess.length){
             bossToGuess = bosses[Math.floor(Math.random() * bosses.length)];
         }
@@ -747,7 +701,7 @@ function setEndlessGuesses() {
 
 function restartButton() {
     // Get the button element
-    var restartButton = document.getElementById('restartButton');
+    const restartButton = document.getElementById('restartButton');
 
     // Check if the button exists
     if (restartButton) {
@@ -785,27 +739,12 @@ function clear() {
     endId.innerHTML = ''
 }
 
-
-// Call this function whenever a quiz is solved
-function incrementSolvedCount() {
-    fetch('../../server/datup.php')
-        .then(response => response.text())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
-}
-
 function fetchDailyData() {
     fetch('../../server/dailysolved.php')
         .then(response => response.json())
         .then(data => {
             document.getElementById('alreadyDailySolved').innerHTML = data + ' people already found the boss';
         })
-        .catch(error => console.error('Error:', error));
-}
-function incrementGlobalSolved() {
-    fetch('../../server/endlessup.php')
-        .then(response => response.text())
-        .then(data => console.log(data))
         .catch(error => console.error('Error:', error));
 }
 
