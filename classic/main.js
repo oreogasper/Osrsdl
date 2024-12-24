@@ -612,8 +612,6 @@ function displayDailyStreak() {
     // Display the daily streak
     if (dailyStreak === 0){
         document.getElementById('dailyStreakDisplay').textContent = 'You have no daily streak';
-    } else if (dailyStreak === 1){
-        document.getElementById('dailyStreakDisplay').textContent = 'Your daily streak is: 1';
     } else if (dailyStreak > 1){
         document.getElementById('dailyStreakDisplay').textContent = `Your daily streak is: ${dailyStreak}`;
     }
