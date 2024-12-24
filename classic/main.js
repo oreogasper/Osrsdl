@@ -506,6 +506,16 @@ function displayWinningScreen() {
     finishedDiv.appendChild(emptyDiv);
     endId.appendChild(finishedDiv);
 
+    const target = finishedDiv.getBoundingClientRect().top + window.scrollY;
+    let start;
+
+    requestAnimationFrame(function scroll(timestamp) {
+        start ??= timestamp;
+        const progress = Math.min((timestamp - start) / 1500, 1);
+        window.scrollTo(0, window.scrollY + (target - window.scrollY) * progress);
+        if (progress < 1) requestAnimationFrame(scroll);
+    });
+
     restartButton();
 
     localStorage.setItem('endlessGuesses', 0)
@@ -529,10 +539,15 @@ function askForGuess() {
         if (guessedBosses.includes(userInput) || userInput === "" || !bossNamesSet.has(userInput)) {
             return;
         }
+
         // Add the boss to the guessed list and process the guess
         guessedBosses.push(userInput);
         guess(userInput);
+
+        // Clear the input field after processing the guess
+        inputField.value = '';
     }
+
 
     // Add event listener to autobox for input field selection
     autobox.addEventListener('click', () => inputField.select());
