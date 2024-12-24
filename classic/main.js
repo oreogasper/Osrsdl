@@ -119,14 +119,15 @@ function updateModeIndicator(mode) {
         modeIndicator.appendChild(button)
     }
     guessedBosses = [];
-  }
-    let dailyGuesses = 0;
-    let endlessGuesses = 0;
-    let bossToGuess
-    let dailyResult = 0;
-    let endlessResult = 0;
 
-    window.endlessMode = function() {
+}
+let dailyGuesses = 0;
+let endlessGuesses = 0;
+let bossToGuess
+let dailyResult = 0;
+let endlessResult = 0;
+
+window.endlessMode = function() {
     // Logic for endless mode
     updateModeIndicator('Endless');
     localStorage.setItem('mode', 'endless');
@@ -135,8 +136,8 @@ function updateModeIndicator(mode) {
     bossToGuess = setBossToGuess();
     loadTriedBosses()
     var event = new CustomEvent('clearUsedNames');
-            window.dispatchEvent(event);
-     // Find the winning screen and remove it if it exists
+    window.dispatchEvent(event);
+    // Find the winning screen and remove it if it exists
     clear();
     // Enable the input
     let input = document.getElementById('inputField');
