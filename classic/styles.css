@@ -1,7 +1,7 @@
 
 @font-face {
     font-family: 'RuneScapeUF';
-    src: url('../fonts/runescape_uf.ttf') format('truetype');
+    src: url('../fonts/RuneScape-Chat-Bold.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -10,9 +10,9 @@
     margin: 0;
     padding: 0;
     font-family: 'RuneScapeUF', Arial, Helvetica, sans-serif;
+    font-size: 18px; /* Adjust this value to make the font size bigger */
     box-sizing: border-box;
 }
-
 body{
     background-image: url('../images/osrs_map.jpg');
     color: #ffffff;

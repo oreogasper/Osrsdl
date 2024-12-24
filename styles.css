@@ -1,3 +1,17 @@
+@font-face {
+    font-family: 'RuneScapeUF';
+    src: url('../fonts/RuneScape-Chat-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'RuneScapeUF', Arial, Helvetica, sans-serif;
+    font-size: 18px; /* Adjust this value to make the font size bigger */
+    box-sizing: border-box;
+}
 .button {
     display: flex;
     text-align: center;
@@ -7,8 +21,8 @@
     margin: 10px;
     transition: background-color 0.3s ease;
     background: #24262a;
-    width: 300px;
-    height: 45px;
+    width: 350px;
+    height: 65px;
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 0 .15rem 1px #00eeff, -.125rem -.125rem .2rem rgba(71, 233, 239, 0.5), .125rem .125rem .2rem rgba(90, 244, 255, 0.5);
@@ -98,10 +112,7 @@ body{
     position: absolute;
 }
 .topButtonText{
-    font-size: 1rem;
-}
-.lowButtonText{
-    font-size: 0.8rem;
+    font-size: 1.35rem;
 }
 .discordImg{
     width: 60px;
