@@ -1,58 +1,65 @@
-// Parse the JSON data
-let nextTime
-let boss
-export let bosses
-//changes for a test
-let guessedBosses = []
-let lastSolvedTimestamp
+// Import the scheduleOperatorReplacement function
+import { scheduleOperatorReplacement } from './bossreplace.js';
 
-window.onload = async function() {
+// Parse the JSON data
+let nextTime;
+let boss;
+export let bosses;
+
+// Changes for a test
+let guessedBosses = [];
+let lastSolvedTimestamp;
+
+window.onload = async function () {
+    // Load boss and operator data
     const operatorResponse = await fetch('./boss.json');
     boss = await operatorResponse.json();
     nextTime = new Date(boss[0].nextChange);
-    const operatorsResponse = await fetch('./bosses.json')
-    bosses = await operatorsResponse.json()
-    lastSolvedTimestamp = localStorage.getItem('lastSolvedTimestamp')
+    const operatorsResponse = await fetch('./bosses.json');
+    bosses = await operatorsResponse.json();
+    lastSolvedTimestamp = localStorage.getItem('lastSolvedTimestamp');
 
-    loadTriedOperators()
+    loadTriedBosses();
 
     // Get the saved mode from localStorage
     let savedMode = localStorage.getItem('mode');
-    let lastGuessedBoss = localStorage.getItem('lastGuessedBoss')
+    let lastGuessedBoss = localStorage.getItem('lastGuessedBoss');
 
     checkDailyStreak();
 
-    // Check if the last guessed Operator is equal to the current boss and if that is not true set dailyWon to false
+    // Reset the daily win status if the last guessed boss doesn't match
     if (lastGuessedBoss !== boss[0].name || lastGuessedBoss === null) {
-        localStorage.setItem('dailyWon', 'false')
-
+        localStorage.setItem('dailyWon', 'false');
         if (guessedBosses.length > 0) {
-            localStorage.setItem('guessedOperators', [])
-            guessedBosses = localStorage.getItem('guessedOperators')
+            localStorage.setItem('guessedBosses', []);
+            guessedBosses = [];
         }
     }
 
-    // If a mode was saved, open that mode
+    // Open the saved mode
     if (savedMode === 'daily') {
         dailyMode();
     } else if (savedMode === 'endless') {
-      endlessMode();
+        endlessMode();
     } else {
-        // Disable the input
         let input = document.getElementById('inputField');
         if (input) {
             input.disabled = true;
         }
     }
-    //console.log(localStorage.getItem('dailyWon'))
+
     // Call fetchDailyData once immediately, then every 5 seconds
     fetchDailyData();
     setInterval(fetchDailyData, 5000);
-    fetchEndlessSolved()
+    fetchEndlessSolved();
     setInterval(fetchEndlessSolved, 5000);
+
     // Start the game
     askForGuess();
-}
+
+    // Schedule the operator replacement for midnight
+    scheduleOperatorReplacement();
+};
 
 function checkDailyStreak() {
     // If the last visit was more than 24 hours, set the streak count to 0
@@ -125,7 +132,7 @@ function updateModeIndicator(mode) {
     displayStreak();
     endlessGuesses = setEndlessGuesses();
     bossToGuess = setBossToGuess();
-    loadTriedOperators()
+    loadTriedBosses()
     var event = new CustomEvent('clearUsedNames');
             window.dispatchEvent(event);
      // Find the winning screen and remove it if it exists
@@ -154,7 +161,6 @@ window.dailyMode = function () {
     if(localStorage.getItem('dailyWon') === 'true'){
         displayWinningScreen()
     }
-
     //Use guess and askForGuess as needed
 }
 // numbers
@@ -183,7 +189,7 @@ function guess(bossName) {
     } else {
         handleGuessFeedback(boss, bossToGuess);
         compareOperators(boss, bossToGuess, bossName.replace(/ /g, '_')); // Compare visually
-        saveTriedOperators();
+        saveTriedBosses();
         askForGuess();
     }
 }
@@ -623,16 +629,16 @@ function displayDailyStreak() {
 }
 
 // Save the tried bosses
-function saveTriedOperators() {
+function saveTriedBosses() {
   if (localStorage.getItem('mode') === 'daily') {
     localStorage.setItem('guessedBosses', JSON.stringify(guessedBosses));
   }
 }
 
 // Load the tried bosses
-function loadTriedOperators() {
+function loadTriedBosses() {
   if (localStorage.getItem('mode') === 'daily') {
-    const savedTriedOperators = localStorage.getItem('guessedOperators');
+    const savedTriedOperators = localStorage.getItem('guessedBosses');
 
     if (savedTriedOperators) {
       guessedBosses = JSON.parse(savedTriedOperators);

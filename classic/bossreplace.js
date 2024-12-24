@@ -4,26 +4,26 @@ export function scheduleOperatorReplacement() {
         .then(serverTime => {
             var now = new Date(serverTime);
 
-            fetch('operator.json')
+            fetch('boss.json')
                 .then(response => response.json())
-                .then(operators => {
-                    var operator = operators[0]; // Assuming the operator is the first item in the array
+                .then(bosses => {
+                    var boss = bosses[0]; // Assuming the boss is the first item in the array
 
-                    if (operator.nextChange) {
-                        var nextChange = new Date(operator.nextChange);
+                    if (boss.nextChange) {
+                        var nextChange = new Date(boss.nextChange);
 
                         if (now > nextChange) {
-                            // The operator needs to be changed, call replaceOperator
+                            // The boss needs to be changed, call replaceOperator
                             replaceOperator();
                         } else {
-                            // The operator is still valid, use it
-                            //console.log('Operator:', operator);
+                            // The boss is still valid, use it
+                            //console.log('Operator:', boss);
 
                             // Calculate the delay until the nextChange time in milliseconds
                             var delay = nextChange - now;
                             //console.log('Delay until next change:', delay);
 
-                            // Schedule the operator replacement
+                            // Schedule the boss replacement
                             setTimeout(replaceOperator, delay);
                         }
                     } else {
@@ -41,26 +41,26 @@ function replaceOperator() {
             var now = new Date(serverTime);
 
             // Load the bosses from the JSON file
-            fetch('operators.json')
+            fetch('bosses.json')
                 .then(response => response.json())
-                .then(operators => {
+                .then(bosses => {
                     // Get a random operator
-                    var newOperator = operators[Math.floor(Math.random() * operators.length)];
+                    var newBoss = bosses[Math.floor(Math.random() * bosses.length)];
 
                     // Add a timestamp for the next change
                     var nextChange = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0);
                     if (now > nextChange) {
                         nextChange.setDate(nextChange.getDate() + 1);
                     }
-                    newOperator.nextChange = nextChange;
+                    newBoss.nextChange = nextChange;
 
-                    console.log('New operator:', newOperator); // Add this line
+                    console.log('New operator:', newBoss); // Add this line
 
                     // Wrap the new operator in an array
-                    var newOperatorArray = [newOperator];
+                    var newBossArray = [newBoss];
 
                     // Convert the new operator array to a JSON string
-                    var jsonString = JSON.stringify(newOperatorArray);
+                    var jsonString = JSON.stringify(newBossArray);
 
                     // Send the JSON string to a server-side script to save it back to the JSON file
                     fetch('saveOperators.php', {
