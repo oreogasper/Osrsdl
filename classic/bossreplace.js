@@ -13,8 +13,8 @@ export function scheduleOperatorReplacement() {
                         var nextChange = new Date(boss.nextChange);
 
                         if (now > nextChange) {
-                            // The boss needs to be changed, call replaceOperator
-                            replaceOperator();
+                            // The boss needs to be changed, call replaceBoss
+                            replaceBoss();
                         } else {
                             // The boss is still valid, use it
                             //console.log('Operator:', boss);
@@ -24,16 +24,16 @@ export function scheduleOperatorReplacement() {
                             //console.log('Delay until next change:', delay);
 
                             // Schedule the boss replacement
-                            setTimeout(replaceOperator, delay);
+                            setTimeout(replaceBoss, delay);
                         }
                     } else {
-                        // nextChange property doesn't exist, call replaceOperator
-                        replaceOperator();
+                        // nextChange property doesn't exist, call replaceBoss
+                        replaceBoss();
                     }
                 });
         });
 }
-function replaceOperator() {
+function replaceBoss() {
     // Get the server time
     fetch('serverTime.php')
         .then(response => response.text())
@@ -54,7 +54,7 @@ function replaceOperator() {
                     }
                     newBoss.nextChange = nextChange;
 
-                    console.log('New operator:', newBoss); // Add this line
+                    console.log('New boss:', newBoss); // Add this line
 
                     // Wrap the new operator in an array
                     var newBossArray = [newBoss];
