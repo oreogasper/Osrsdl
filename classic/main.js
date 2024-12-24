@@ -183,13 +183,13 @@ function guess(bossName) {
     console.log("Found boss:", boss);
 
     compareBosses(boss, bossToGuess);
+    compareOperators(boss, bossToGuess, bossName.replace(/ /g, '_')); // Compare visually
+    saveTriedBosses();
 
     if (bossName.toLowerCase() === bossToGuess.name.toLowerCase()) {
         handleWinning(bossName, mode);
     } else {
         handleGuessFeedback(boss, bossToGuess);
-        compareOperators(boss, bossToGuess, bossName.replace(/ /g, '_')); // Compare visually
-        saveTriedBosses();
         askForGuess();
     }
 }
@@ -242,13 +242,21 @@ function processKeyComparison(boss, bossToGuess, key, isVisual) {
             return false; // No match
         }
     } else if (Array.isArray(boss[key]) && Array.isArray(bossToGuess[key])) {
-        const matchingRoles = boss[key].filter(role => bossToGuess[key].includes(role));
-        if (matchingRoles.length > 0) {
-            logComparison(isVisual, key, boss[key].join(", "), squareClasses.partial, "🟠");
-            return true; // Partial match
+        const arraysAreEqual = boss[key].length === bossToGuess[key].length &&
+            boss[key].every((value, index) => value === bossToGuess[key][index]);
+        if (arraysAreEqual) {
+            logComparison(isVisual, key, boss[key].join(", "), squareClasses.good, "✅");
+            return true;
         } else {
-            logComparison(isVisual, key, boss[key].join(", "), squareClasses.bad, "🔴");
-            return false; // No match
+            // Check for partial matches
+            const matchingRoles = boss[key].filter(role => bossToGuess[key].includes(role));
+            if (matchingRoles.length > 0) {
+                logComparison(isVisual, key, boss[key].join(", "), squareClasses.partial, "🟠");
+                return false;
+            } else {
+                logComparison(isVisual, key, boss[key].join(", "), squareClasses.bad, "🔴");
+                return false;
+            }
         }
     } else if (boss[key] === bossToGuess[key]) {
         logComparison(isVisual, key, boss[key], squareClasses.good, "✅");
@@ -319,14 +327,23 @@ function compareOperators(boss, bossToGuess, scoredName) {
                 sharedCriteria = true;
             }
         } else if (Array.isArray(boss[key]) && Array.isArray(bossToGuess[key])) {
-            const matchingRoles = boss[key].filter(role => bossToGuess[key].includes(role));
-            if (matchingRoles.length > 0) {
-                square.classList.add('square-partial');
+            const arraysAreEqual = boss[key].length === bossToGuess[key].length &&
+                boss[key].every((value, index) => value === bossToGuess[key][index]);
+
+            if (arraysAreEqual) {
+                square.classList.add('square-good');
                 content.textContent = boss[key].join(', ');
                 sharedCriteria = true;
             } else {
-                square.classList.add('square-bad');
-                content.textContent = boss[key].join(', ');
+                // Check for partial matches
+                const matchingRoles = boss[key].filter(role => bossToGuess[key].includes(role));
+                if (matchingRoles.length > 0) {
+                    square.classList.add('square-partial');
+                    content.textContent = boss[key].join(', ');
+                } else {
+                    square.classList.add('square-bad');
+                    content.textContent = boss[key].join(', ');
+                }
             }
         } else if (boss[key] === bossToGuess[key]) {
             square.classList.add('square-good');
@@ -406,99 +423,104 @@ function startCountdown(nextTime, countdownTime) {
 }
 
 function displayWinningScreen() {
-    if (localStorage.getItem('mode') === 'daily' && localStorage.getItem('dailyWon') === 'true') {
+    const mode = localStorage.getItem('mode');
+    const dailyWon = localStorage.getItem('dailyWon') === 'true';
+    const endId = document.getElementById('endId');
+
+    if (mode === 'daily' && dailyWon) {
         dailyResult = localStorage.getItem('dailyResult');
     }
 
-    let endId = document.getElementById('endId');
-    let finishedDiv = document.createElement('div');
+    // Main container
+    const finishedDiv = document.createElement('div');
     finishedDiv.className = 'finished';
 
-    let emptyDiv = document.createElement('div');
-    let backgroundEndDiv = document.createElement('div');
+    const emptyDiv = document.createElement('div');
+    const backgroundEndDiv = document.createElement('div');
     backgroundEndDiv.className = 'background-end';
 
-    let ggDiv = document.createElement('div');
+    // "gg wp" header
+    const ggDiv = document.createElement('div');
     ggDiv.className = 'gg';
     ggDiv.innerHTML = 'gg wp';
 
-    let ggAnswerDiv = document.createElement('div');
+    // Answer section
+    const ggAnswerDiv = document.createElement('div');
     ggAnswerDiv.className = 'gg-answer';
 
-    let firstInnerDiv = document.createElement('div');
-    let img = document.createElement('img');
-    img.width = 60;
-    img.height = 60;
-    img.className = "gg-icon";
+    const firstInnerDiv = document.createElement('div');
+    const img = document.createElement('img');
+    img.width = 80;
+    img.height = 80;
+    img.className = 'gg-icon';
     img.src = `../images/mobs/${bossToGuess.name.replace(/ /g, '_')}.png`;
     firstInnerDiv.appendChild(img);
+    ggAnswerDiv.appendChild(firstInnerDiv);
 
-    let secondInnerDiv = document.createElement('div');
-    let ggYouSpan = document.createElement('span');
+    const secondInnerDiv = document.createElement('div');
+    const ggYouSpan = document.createElement('span');
     ggYouSpan.className = 'gg-you';
-    ggYouSpan.innerHTML = 'You guessed';
+    ggYouSpan.innerHTML = 'You guessed:';
     secondInnerDiv.appendChild(ggYouSpan);
 
-    let br = document.createElement('br');
-    secondInnerDiv.appendChild(br);
+    secondInnerDiv.appendChild(document.createElement('br'));
 
-    let ggNameDiv = document.createElement('div');
+    const ggNameDiv = document.createElement('div');
     ggNameDiv.className = 'gg-name';
     ggNameDiv.innerHTML = bossToGuess.name;
     secondInnerDiv.appendChild(ggNameDiv);
 
-    let nthTriesDiv = document.createElement('div');
-    nthTriesDiv.className = 'nthtries';
-    nthTriesDiv.innerHTML = 'Number of tries: ';
+    ggAnswerDiv.appendChild(secondInnerDiv);
 
-    let nthSpan = document.createElement('span');
+    // Number of tries
+    const nthTriesDiv = document.createElement('div');
+    nthTriesDiv.className = 'nthtries';
+    const tries = mode === 'daily' ? dailyGuesses : endlessGuesses;
+    nthTriesDiv.innerHTML = `Number of tries: ${tries}`;
+
+    const nthSpan = document.createElement('span');
     nthSpan.className = 'nth';
-    nthSpan.innerHTML = localStorage.getItem('mode') === 'daily' ? dailyResult : endlessResult;
+    nthSpan.innerHTML = mode === 'daily' ? dailyResult : endlessResult;
     nthTriesDiv.appendChild(nthSpan);
 
-    let button = document.createElement('button');
-    button.className = 'de_button';
-    button.innerHTML = 'Restart';
-    button.id = 'restartButton';
-
-    let countdown = document.createElement('div');
-    countdown.className = 'next-boss next-boss';
-
-    let nextTitle = document.createElement('div');
-    nextTitle.className = 'next-title';
-    nextTitle.innerHTML = 'Next boss in:';
-    countdown.appendChild(nextTitle);
-
-    let countdownTime = document.createElement('div');
-    countdownTime.className = 'modal-time';
-    countdownTime.id = 'countdown';
-    countdown.appendChild(countdownTime);
-
-    if (localStorage.getItem('mode') === 'daily') {
-        const nextTime = getNextMidnightEST();
-        startCountdown(nextTime, countdownTime);
-    }
-
-
-    ggAnswerDiv.appendChild(firstInnerDiv);
-    ggAnswerDiv.appendChild(secondInnerDiv);
+    // Assemble and append elements
     backgroundEndDiv.appendChild(ggDiv);
     backgroundEndDiv.appendChild(ggAnswerDiv);
     backgroundEndDiv.appendChild(nthTriesDiv);
 
-    if (localStorage.getItem('mode') === 'endless') {
-        backgroundEndDiv.appendChild(button);
-    } else if (localStorage.getItem('mode') === 'daily') {
+    // Countdown or restart button
+    if (mode === 'daily') {
+        const countdown = document.createElement('div');
+        countdown.className = 'next-boss next-boss';
+
+        const nextTitle = document.createElement('div');
+        nextTitle.className = 'next-title';
+        nextTitle.innerHTML = 'Next boss in:';
+        countdown.appendChild(nextTitle);
+
+        const countdownTime = document.createElement('div');
+        countdownTime.className = 'modal-time';
+        countdownTime.id = 'countdown';
+        countdown.appendChild(countdownTime);
+
+        const nextTime = getNextMidnightEST();
+        startCountdown(nextTime, countdownTime);
+
         backgroundEndDiv.appendChild(countdown);
+    } else if (mode === 'endless') {
+        const button = document.createElement('button');
+        button.className = 'de_button';
+        button.innerHTML = 'Restart';
+        button.id = 'restartButton';
+        backgroundEndDiv.appendChild(button);
     }
 
     emptyDiv.appendChild(backgroundEndDiv);
     finishedDiv.appendChild(emptyDiv);
     endId.appendChild(finishedDiv);
+
     restartButton();
 }
-
-
 
 function askForGuess() {
     // Get the button and input field elements
@@ -731,9 +753,9 @@ function restartButton() {
     if (restartButton) {
         // Add a click event listener to the button
         restartButton.addEventListener('click', function() {
-            guessedBosses = []
+            localStorage.setItem('guessedBosses', [])
             bossToGuess = setBossToGuess()
-            endlessGuesses = 0
+            localStorage.setItem('endlessGuesses', 0)
             let input  = document.getElementById('inputField')
                     input.disabled = false
             clear()
