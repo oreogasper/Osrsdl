@@ -118,6 +118,7 @@ function updateModeIndicator(mode) {
         }
         modeIndicator.appendChild(button)
     }
+    guessedBosses = [];
   }
     let dailyGuesses = 0;
     let endlessGuesses = 0;
@@ -172,15 +173,11 @@ function guess(bossName) {
     const mode = localStorage.getItem('mode');
     handleGuesses(mode);
 
-    console.log(`daily: ${dailyGuesses}, endless: ${endlessGuesses}`);
-
     const boss = findBoss(bossName);
     if (!boss) {
-        console.log("🔴 Boss not found");
         return askForGuess();
     }
 
-    console.log("Found boss:", boss);
 
     compareBosses(boss, bossToGuess);
     compareOperators(boss, bossToGuess, bossName.replace(/ /g, '_')); // Compare visually
@@ -200,7 +197,7 @@ function handleGuesses(mode) {
         localStorage.setItem('dailyGuesses', dailyGuesses);
     } else if (mode === 'endless') {
         if (endlessGuesses === 0) tutoButton();
-        endlessGuesses++;
+        endlessGuesses = endlessGuesses + 1;
         localStorage.setItem('endlessGuesses', endlessGuesses);
     }
 }
@@ -370,6 +367,7 @@ function handleWinning(bossName, mode) {
     }
     problemSolved();
     displayWinningScreen();
+
 }
 
 // Helper function to calculate the next midnight EST
@@ -469,7 +467,7 @@ function displayWinningScreen() {
 
     const nthSpan = document.createElement('span');
     nthSpan.className = 'nth';
-    nthSpan.innerHTML = mode === 'daily' ? dailyResult : endlessResult;
+    nthSpan.innerHTML = mode === 'daily' ? dailyResult : null;
     nthTriesDiv.appendChild(nthSpan);
 
     // Assemble and append elements
@@ -509,6 +507,9 @@ function displayWinningScreen() {
     endId.appendChild(finishedDiv);
 
     restartButton();
+
+    localStorage.setItem('endlessGuesses', 0)
+    localStorage.setItem('dailyGuesses', 0)
 }
 
 function askForGuess() {
@@ -707,9 +708,12 @@ function restartButton() {
     if (restartButton) {
         // Add a click event listener to the button
         restartButton.addEventListener('click', function() {
-            localStorage.setItem('guessedBosses', [])
+            // localStorage.setItem('guessedBosses', [])
             bossToGuess = setBossToGuess()
-            localStorage.setItem('endlessGuesses', 0)
+            // localStorage.setItem('endlessGuesses', 0)
+
+            guessedBosses = [];
+            endlessGuesses = 0
             let input  = document.getElementById('inputField')
                     input.disabled = false
             clear()
