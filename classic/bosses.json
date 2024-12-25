@@ -452,5 +452,469 @@
     "release_year": "2021",
     "region": "Morytania",
     "solo": "No"
+  },
+  {
+    "name": "Duke Sucellus",
+    "solo_level": "768",
+    "hitpoints": "560",
+    "attack_style": [
+      "Melee",
+      "Magic"
+    ],
+    "release_year": "2023",
+    "region": "Fremennik",
+    "solo": "No"
+  },
+  {
+    "name": "The Leviathan",
+    "solo_level": "798",
+    "hitpoints": "900",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2023",
+    "region": "Misthalin",
+    "solo": "No"
+  },
+  {
+    "name": "The Whisperer",
+    "solo_level": "791",
+    "hitpoints": "900",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2023",
+    "region": "Asgarnia",
+    "solo": "No"
+  },
+  {
+    "name": "Vardorvis",
+    "solo_level": "784",
+    "hitpoints": "700",
+    "attack_style": [
+      "Melee"
+    ],
+    "release_year": "2023",
+    "region": "Varlamore",
+    "solo": "No"
+  },
+  {
+    "name": "Obor",
+    "solo_level": "106",
+    "hitpoints": "120",
+    "attack_style": [
+      "Melee",
+      "Ranged"
+    ],
+    "release_year": "2016",
+    "region": "Misthalin",
+    "solo": "Yes"
+  },
+  {
+    "name": "Bryophyta",
+    "solo_level": "128",
+    "hitpoints": "115",
+    "attack_style": [
+      "Melee",
+      "Magic"
+    ],
+    "release_year": "2018",
+    "region": "Misthalin",
+    "solo": "Yes"
+  },
+  {
+    "name": "The Mimic",
+    "solo_level": "186",
+    "hitpoints": "600",
+    "attack_style": [
+      "Melee"
+    ],
+    "release_year": "2019",
+    "region": "Kourend",
+    "solo": "Yes"
+  },
+  {
+    "name": "Hespori",
+    "solo_level": "284",
+    "hitpoints": "300",
+    "attack_style": [
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2019",
+    "region": "Kourend",
+    "solo": "Yes"
+  },
+  {
+    "name": "Skotizo",
+    "solo_level": "321",
+    "hitpoints": "450",
+    "attack_style": [
+      "Melee",
+      "Magic"
+    ],
+    "release_year": "2016",
+    "region": "Kourend",
+    "solo": "Yes"
+  },
+  {
+    "name": "Grotesque Guardians",
+    "solo_level": "248",
+    "hitpoints": "300",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2017",
+    "region": "Morytania",
+    "solo": "Yes"
+  },
+  {
+    "name": "Abyssal Sire",
+    "solo_level": "350",
+    "hitpoints": "400",
+    "attack_style": [
+      "Melee",
+      "Magic"
+    ],
+    "release_year": "2015",
+    "region": "Misthalin",
+    "solo": "Yes"
+  },
+  {
+    "name": "Kraken",
+    "solo_level": "291",
+    "hitpoints": "255",
+    "attack_style": [
+      "Magic"
+    ],
+    "release_year": "2014",
+    "region": "Kandarin",
+    "solo": "Yes"
+  },
+  {
+    "name": "Cerberus",
+    "solo_level": "318",
+    "hitpoints": "600",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2015",
+    "region": "Asgarnia",
+    "solo": "Yes"
+  },
+  {
+    "name": "Thermonuclear Smoke Devil",
+    "solo_level": "301",
+    "hitpoints": "240",
+    "attack_style": [
+      "Magic"
+    ],
+    "release_year": "2014",
+    "region": "Kandarin",
+    "solo": "Yes"
+  },
+  {
+    "name": "Alchemical Hydra",
+    "solo_level": "426",
+    "hitpoints": "1100",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2019",
+    "region": "Kourend",
+    "solo": "Yes"
+  },
+  {
+    "name": "Crystalline Hunllef",
+    "solo_level": "674",
+    "hitpoints": "600",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2019",
+    "region": "Tirannwn",
+    "solo": "Yes"
+  },
+  {
+    "name": "Corrupted Hunllef",
+    "solo_level": "894",
+    "hitpoints": "1000",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2019",
+    "region": "Tirannwn",
+    "solo": "Yes"
+  },
+  {
+    "name": "TzTok-Jad",
+    "solo_level": "702",
+    "hitpoints": "250",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2005",
+    "region": "Karamja",
+    "solo": "Yes"
+  },
+  {
+    "name": "TzKal-Zuk",
+    "solo_level": "1400",
+    "hitpoints": "600",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2017",
+    "region": "Karamja",
+    "solo": "Yes"
+  },
+  {
+    "name": "Sol Heredit",
+    "solo_level": "555",
+    "hitpoints": "500",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2024",
+    "region": "Varlamore",
+    "solo": "Yes"
+  },
+  {
+    "name": "Tekton",
+    "solo_level": "360",
+    "hitpoints": "400",
+    "attack_style": [
+      "Melee"
+    ],
+    "release_year": "2017",
+    "region": "Kourend",
+    "solo": "No"
+  },
+  {
+    "name": "Vanguard",
+    "solo_level": "750",
+    "hitpoints": "150",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2017",
+    "region": "Kourend",
+    "solo": "No"
+  },
+  {
+    "name": "Vespula",
+    "solo_level": "300",
+    "hitpoints": "200",
+    "attack_style": [
+      "Ranged"
+    ],
+    "release_year": "2017",
+    "region": "Kourend",
+    "solo": "No"
+  },
+  {
+    "name": "Vasa Nistirio",
+    "solo_level": "300",
+    "hitpoints": "300",
+    "attack_style": [
+      "Magic"
+    ],
+    "release_year": "2017",
+    "region": "Kourend",
+    "solo": "No"
+  },
+  {
+    "name": "Muttadile",
+    "solo_level": "350",
+    "hitpoints": "300",
+    "attack_style": [
+      "Melee",
+      "Magic"
+    ],
+    "release_year": "2017",
+    "region": "Kourend",
+    "solo": "No"
+  },
+  {
+    "name": "Great Olm",
+    "solo_level": "1043",
+    "hitpoints": "800",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2017",
+    "region": "Kourend",
+    "solo": "No"
+  },
+  {
+    "name": "The Maiden of Sugadinti",
+    "solo_level": "940",
+    "hitpoints": "35,000",
+    "attack_style": [
+      "Magic"
+    ],
+    "release_year": "2018",
+    "region": "Morytania",
+    "solo": "No"
+  },
+  {
+    "name": "Pestilent Bloat",
+    "solo_level": "870",
+    "hitpoints": "20,000",
+    "attack_style": [
+      "Melee"
+    ],
+    "release_year": "2018",
+    "region": "Morytania",
+    "solo": "No"
+  },
+  {
+    "name": "Nylocas Vasilias",
+    "solo_level": "800",
+    "hitpoints": "25,000",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2018",
+    "region": "Morytania",
+    "solo": "No"
+  },
+  {
+    "name": "Sotetseg",
+    "solo_level": "995",
+    "hitpoints": "30,000",
+    "attack_style": [
+      "Melee",
+      "Magic"
+    ],
+    "release_year": "2018",
+    "region": "Morytania",
+    "solo": "No"
+  },
+  {
+    "name": "Xarpus",
+    "solo_level": "960",
+    "hitpoints": "40,000",
+    "attack_style": [
+      "Melee"
+    ],
+    "release_year": "2018",
+    "region": "Morytania",
+    "solo": "No"
+  },
+  {
+    "name": "Verzik Vitur",
+    "solo_level": "1040",
+    "hitpoints": "50,000",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2018",
+    "region": "Morytania",
+    "solo": "No"
+  },
+  {
+    "name": "Akkha",
+    "solo_level": "300",
+    "hitpoints": "400",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2022",
+    "region": "Kharidian Desert",
+    "solo": "No"
+  },
+  {
+    "name": "Ba-Ba",
+    "solo_level": "350",
+    "hitpoints": "500",
+    "attack_style": [
+      "Melee",
+      "Ranged"
+    ],
+    "release_year": "2022",
+    "region": "Kharidian Desert",
+    "solo": "No"
+  },
+  {
+    "name": "Kephri",
+    "solo_level": "370",
+    "hitpoints": "600",
+    "attack_style": [
+      "Melee",
+      "Magic"
+    ],
+    "release_year": "2022",
+    "region": "Kharidian Desert",
+    "solo": "No"
+  },
+  {
+    "name": "Zebak",
+    "solo_level": "450",
+    "hitpoints": "700",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2022",
+    "region": "Kharidian Desert",
+    "solo": "No"
+  },
+  {
+    "name": "Tumeken's Warden",
+    "solo_level": "544",
+    "hitpoints": "800",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2022",
+    "region": "Kharidian Desert",
+    "solo": "No"
+  },
+  {
+    "name": "Elidinis' Warden",
+    "solo_level": "544",
+    "hitpoints": "800",
+    "attack_style": [
+      "Melee",
+      "Magic",
+      "Ranged"
+    ],
+    "release_year": "2022",
+    "region": "Kharidian Desert",
+    "solo": "No"
   }
 ]
