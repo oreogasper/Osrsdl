@@ -235,6 +235,22 @@ button .fa-solid{
     border-radius: 5px;
     border: .13rem solid #fff;
 }
+.background-end {
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .24);
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    vertical-align: center;
+    align-content: center;
+    justify-self: center;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    background: linear-gradient(#0d4d27, #1e2328);
+    border: 2px solid #69ffa5;
+    row-gap: .5rem;
+}
 .next-operator {
     margin-top: 1rem;
 }
@@ -411,10 +427,6 @@ button .fa-solid{
         font-weight: 800;
         text-align: center;
     }
-    .gg-icon {
-        border-radius: 5px;
-        border: .13rem solid #fff;
-    }
     .next-operator {
         margin-top: 1rem;
     }
@@ -549,33 +561,8 @@ button .fa-solid{
         display: flex;
         justify-content: center;
     }
-    .background-end {
-        border-radius: 8px;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, .24);
-        padding: 1rem 2rem;
-        display: flex;
-        flex-direction: column;
-        vertical-align: center;
-        align-content: center;
-        justify-self: center;
-        align-items: center;
-        text-align: center;
-        justify-content: center;
-        background: linear-gradient(#0d4d27, #1e2328);
-        border: 2px solid #69ffa5;
-        row-gap: .5rem;
-    }
     .gg {
         font-size: 1.5rem;
-        margin-bottom: 1rem;
-        width: 100%;
-    }
-    .gg-answer {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        -moz-column-gap: .8rem;
-        column-gap: .8rem;
     }
     .gg-you {
         font-size: 1.1rem;
@@ -587,10 +574,6 @@ button .fa-solid{
         font-size: 1.2rem;
         font-weight: 1000;
         text-align: center;
-    }
-    .gg-icon {
-        border-radius: 5px;
-        border: .13rem solid #fff;
     }
     .next-operator {
         margin-top: 1rem;
