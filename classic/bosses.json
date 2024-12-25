@@ -270,7 +270,7 @@
     "hitpoints": "255",
     "attack_style": [
       "Melee",
-      "Dragonfire (long-ranged)"
+      "Dragonfire"
     ],
     "release_year": "2002",
     "region": "Wilderness",
@@ -408,7 +408,7 @@
       "Melee",
       "Ranged",
       "Magic",
-      "Dragonfire (long-ranged)"
+      "Dragonfire"
     ],
     "release_year": "2018",
     "region": "Fremennik",
