@@ -63,7 +63,7 @@ function replaceBoss() {
                     var jsonString = JSON.stringify(newBossArray);
 
                     // Send the JSON string to a server-side script to save it back to the JSON file
-                    fetch('saveOperators.php', {
+                    fetch('../saveOperators.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
