@@ -195,11 +195,11 @@ function guess(bossName) {
 
 function handleGuesses(mode) {
     if (mode === 'daily') {
-        if (dailyGuesses === 0) tutoButton();
+        tutoButton();
         dailyGuesses++;
         localStorage.setItem('dailyGuesses', dailyGuesses);
     } else if (mode === 'endless') {
-        if (endlessGuesses === 0) tutoButton();
+        tutoButton();
         endlessGuesses = endlessGuesses + 1;
         localStorage.setItem('endlessGuesses', endlessGuesses);
     }
@@ -322,7 +322,7 @@ function compareOperators(boss, bossToGuess, scoredName) {
                 content.textContent = `${boss[key]}`;
             } else {
                 square.classList.add('square-good');
-                content.textContent = `✅ ${boss[key]}`;
+                content.textContent = `${boss[key]}`;
                 sharedCriteria = true;
             }
         } else if (Array.isArray(boss[key]) && Array.isArray(bossToGuess[key])) {
@@ -737,13 +737,13 @@ function tutoButton(){
     //Get the tuto element
     var tutoElement = document.getElementById('tuto')
     tutoElement.style.display = 'contents'
-
+/*
     var tutoButton = document.getElementById('close')
     if (tutoButton){
         tutoButton.addEventListener('click', function(){
             tutoElement.style.display = 'none'
         })
-    }
+    }*/
 }
 
 function clear() {
