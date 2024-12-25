@@ -137,6 +137,26 @@ button .fa-solid{
     background-size: cover;
     transition: background-color .3s ease;
 }
+.square-higher {
+    background-image: url('../images/webicons/higher-arrow.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 50px; /* Adjust the width */
+    height: 50px; /* Adjust the height */
+    display: inline-block; /* Allows for inline usage */
+    transition: transform .3s ease; /* Add a transition effect */
+}
+.square-lower {
+    background-image: url('../images/webicons/lower-arrow.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 50px; /* Adjust the width */
+    height: 50px; /* Adjust the height */
+    display: inline-block; /* Allows for inline usage */
+    transition: transform .3s ease; /* Add a transition effect */
+}
 .answers-container {
     padding: 0;
     margin: 0 auto; /* Centers horizontally */

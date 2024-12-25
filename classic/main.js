@@ -315,11 +315,11 @@ function compareOperators(boss, bossToGuess, scoredName) {
 
         if (key === 'release_year' || key === 'hitpoints' || key === 'solo_level') {
             if (boss[key] < bossToGuess[key]) {
-                square.classList.add('square-bad');
-                content.textContent = `⬆️ ${boss[key]}`;
+                square.classList.add('square-higher');
+                content.textContent = `${boss[key]}`;
             } else if (boss[key] > bossToGuess[key]) {
                 square.classList.add('square-bad');
-                content.textContent = `⬇️ ${boss[key]}`;
+                content.textContent = `${boss[key]}`;
             } else {
                 square.classList.add('square-good');
                 content.textContent = `✅ ${boss[key]}`;
