@@ -48,16 +48,18 @@ window.onload = async function () {
         }
     }
 
-    // Call fetchDailyData once immediately, then every 5 seconds
+    /*// Call fetchDailyData once immediately, then every 5 seconds
     fetchDailyData();
     setInterval(fetchDailyData, 5000);
     fetchEndlessSolved();
-    setInterval(fetchEndlessSolved, 5000);
+    setInterval(fetchEndlessSolved, 5000);*/
 
     // Start the game
     askForGuess();
 
     // Schedule the operator replacement for midnight
+/*    const nextTimes = getNextMidnightEST();
+    startCountdown(nextTimes, countdownTime);*/
     scheduleOperatorReplacement();
 };
 
