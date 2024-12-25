@@ -373,24 +373,19 @@ function handleWinning(bossName, mode) {
 
 // Helper function to calculate the next midnight EST
 function getNextMidnightEST() {
+    // Get the current date and time in the EST timezone
     const now = new Date();
+    const estNow = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
 
-    // Get the current UTC time
-    const utcNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+    // Set to midnight of the next day in EST
+    const estMidnight = new Date(estNow);
+    estMidnight.setDate(estMidnight.getDate() + 1); // Move to the next day
+    estMidnight.setHours(0, 0, 0, 0); // Set time to midnight
 
-    // Set UTC midnight
-    const utcMidnight = new Date(utcNow);
-    utcMidnight.setUTCHours(24, 0, 0, 0);
-
-    // Adjust for EST (UTC-5 or UTC-4 for DST)
-    const isDST = now.getTimezoneOffset() < 300; // DST active if offset < 300
-    const estOffset = isDST ? 18 : 19; // UTC-4 for DST, UTC-5 otherwise
-    utcMidnight.setHours(utcMidnight.getHours() - estOffset);
-
-    return utcMidnight.getTime();
+    // Return the EST midnight time as UTC timestamp
+    return estMidnight.getTime();
 }
 
-// Countdown logic function
 function startCountdown(nextTime, countdownTime) {
     let countdownInterval = setInterval(() => {
         const now = new Date().getTime();
@@ -401,7 +396,6 @@ function startCountdown(nextTime, countdownTime) {
             countdownTime.innerHTML = "Refresh the site to get the new boss";
             return;
         }
-
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -548,8 +542,6 @@ function askForGuess() {
         // Clear the input field after processing the guess
         inputField.value = '';
     }
-
-
     // Add event listener to autobox for input field selection
     autobox.addEventListener('click', () => inputField.select());
 
@@ -770,15 +762,26 @@ function fetchDailyData() {
 
 function fetchEndlessSolved() {
     fetch('../../server/endlesssolved.php')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                console.error('HTTP Status:', response.status);
+                return response.text().then(text => {
+                    console.error('Response Text:', text);
+                    throw new Error('Network response was not ok');
+                });
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.error) {
                 console.error('Error:', data.error);
             } else {
-                document.getElementById('globalSolvedEndless').innerHTML =  data.globalSolvedEndless + ' times was the Endless mode solved already';
+                document.getElementById('globalSolvedEndless').innerHTML =
+                    data.globalSolvedEndless + ' times was the Endless solved.';
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Fetch Error:', error));
+
 }
 
 export function getGuessedbosses() {
