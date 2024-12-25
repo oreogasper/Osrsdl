@@ -26,6 +26,8 @@ export function scheduleOperatorReplacement() {
         });
 }
 
+const fs = require('fs');
+
 function replaceBoss() {
     const now = new Date();
     const nextMidnight = getNextMidnightEST(); // Use your helper function to calculate next midnight EST
@@ -42,31 +44,23 @@ function replaceBoss() {
 
             console.log("New Boss Assigned:", newBoss);
 
-            // Wrap the new boss in an array
+            // Wrap the new boss in an array to preserve the format
             const newBossArray = [newBoss];
 
             // Convert the new boss array to a JSON string
             const jsonString = JSON.stringify(newBossArray);
 
-            // Save the new boss to boss.json using the saveOperators.php endpoint
-            fetch('saveOperators.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: jsonString,
-            })
-                .then(() => {
-                    console.log("Boss successfully saved with nextChange:", newBoss.nextChange);
-                })
-                .catch(error => {
-                    console.error("Failed to save new boss:", error);
-                });
-        })
-        .catch(error => {
-            console.error("Failed to fetch bosses.json:", error);
+            // Save the new boss to boss.json while preserving the same JSON format
+            fs.writeFile('boss.json', jsonString, 'utf8', (err) => {
+                if (err) {
+                    console.error("Error saving new boss to boss.json:", err);
+                } else {
+                    console.log("New boss successfully saved to boss.json.");
+                }
+            });
         });
 }
+
 function getNextMidnightEST() {
     const now = new Date();
 
