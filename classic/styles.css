@@ -5,7 +5,6 @@
     font-weight: normal;
     font-style: normal;
 }
-
 * {
     margin: 0;
     padding: 0;
@@ -41,8 +40,8 @@ button .fa-solid{
     display: flex;
 }
 .logo-container{
-    height: 10%;
-    width: 20%;
+    height: 1%;
+    width: 1%;
     display: flex;
 }
 .auto-box ul{
