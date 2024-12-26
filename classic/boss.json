@@ -1,13 +1,13 @@
 [
   {
-    "name": "Ahrim the Blighted",
-    "solo_level": "98",
-    "hitpoints": "100",
+    "name": "Vardorvis",
+    "solo_level": "784",
+    "hitpoints": "700",
     "attack_style": [
-      "Magic"
+      "Melee"
     ],
-    "release_year": "2005",
-    "region": "Morytania",
-    "solo": "Yes"
+    "release_year": "2023",
+    "region": "Varlamore",
+    "solo": "No"
   }
 ]
