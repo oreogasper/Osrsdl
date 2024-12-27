@@ -318,7 +318,7 @@ function compareOperators(boss, bossToGuess, scoredName) {
                 square.classList.add('square-higher');
                 content.textContent = `${boss[key]}`;
             } else if (boss[key] > bossToGuess[key]) {
-                square.classList.add('square-lower');
+                square.classList.add('square-bad');
                 content.textContent = `${boss[key]}`;
             } else {
                 square.classList.add('square-good');
