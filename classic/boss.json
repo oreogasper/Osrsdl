@@ -1,13 +1,15 @@
 [
   {
-    "name": "Ahrim the Blighted",
-    "solo_level": "98",
-    "hitpoints": "100",
+    "name": "Venenatis",
+    "solo_level": "464",
+    "hitpoints": "850",
     "attack_style": [
-      "Magic"
+      "Melee",
+      "Magic",
+      "Ranged"
     ],
-    "release_year": "2005",
-    "region": "Morytania",
+    "release_year": "2023",
+    "region": "Wilderness",
     "solo": "Yes"
   }
 ]
