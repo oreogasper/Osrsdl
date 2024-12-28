@@ -66,6 +66,42 @@
     "solo": "Yes"
   },
   {
+    "name": "Scurrius",
+    "solo_level": "200",
+    "hitpoints": "500",
+    "attack_style": [
+        "Melee",
+        "Ranged",
+        "Magic"
+    ],
+    "release_year": "2024",
+    "region": "Varrock",
+    "solo": "No"
+  },
+  {
+    "name": "Giant Mole",
+    "solo_level": "230",
+    "hitpoints": "200",
+    "attack_style": [
+      "Melee"
+    ],
+    "release_year": "2006",
+    "region": "Falador",
+    "solo": "No"
+  },
+  {
+    "name": "Deranged Archaeologist",
+    "solo_level": "276",
+    "hitpoints": "200",
+    "attack_style": [
+      "Melee",
+      "Ranged"
+    ],
+    "release_year": "2017",
+    "region": "Morytania",
+    "solo": "Yes"
+  },
+  {
     "name": "Dagannoth Supreme",
     "solo_level": "303",
     "hitpoints": "255",
