@@ -1,15 +1,14 @@
 [
   {
-    "name": "Venenatis",
-    "solo_level": "464",
-    "hitpoints": "850",
+    "name": "Obor",
+    "solo_level": "106",
+    "hitpoints": "120",
     "attack_style": [
       "Melee",
-      "Magic",
       "Ranged"
     ],
-    "release_year": "2023",
-    "region": "Wilderness",
+    "release_year": "2016",
+    "region": "Misthalin",
     "solo": "Yes"
   }
 ]
