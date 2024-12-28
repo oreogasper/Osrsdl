@@ -229,6 +229,8 @@ function processKeyComparison(boss, bossToGuess, key, isVisual) {
         good: 'square-good',
         bad: 'square-bad',
         partial: 'square-partial',
+        high: 'square-higher',
+        low: 'square-lower'
     };
 
     if (key === 'release_year' || key === 'hitpoints' || key === 'solo_level') {
@@ -236,8 +238,14 @@ function processKeyComparison(boss, bossToGuess, key, isVisual) {
             logComparison(isVisual, key, boss[key], squareClasses.good, "✅");
             return true; // Match found
         } else {
-            const icon = boss[key] < bossToGuess[key] ? "⬆️" : "⬇️";
-            logComparison(isVisual, key, boss[key], squareClasses.bad, icon);
+            if (boss[key] < bossToGuess[key]) {
+                const icon = "⬆️";
+                logComparison(isVisual, key, boss[key], squareClasses.high, icon);
+            }
+            else {
+                const icon = "⬇️";
+                logComparison(isVisual, key, boss[key], squareClasses.low, icon);
+            }
             return false; // No match
         }
     } else if (Array.isArray(boss[key]) && Array.isArray(bossToGuess[key])) {
