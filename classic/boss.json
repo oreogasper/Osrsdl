@@ -1,14 +1,13 @@
 [
   {
-    "name": "Obor",
-    "solo_level": "106",
-    "hitpoints": "120",
+    "name": "Pestilent Bloat",
+    "solo_level": "870",
+    "hitpoints": "20,000",
     "attack_style": [
-      "Melee",
-      "Ranged"
+      "Melee"
     ],
-    "release_year": "2016",
-    "region": "Misthalin",
-    "solo": "Yes"
+    "release_year": "2018",
+    "region": "Morytania",
+    "solo": "No"
   }
 ]
