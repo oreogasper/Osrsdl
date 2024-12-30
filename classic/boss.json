@@ -1,13 +1,15 @@
 [
   {
-    "name": "The Mimic",
-    "solo_level": "186",
-    "hitpoints": "600",
+    "name": "Grotesque Guardians",
+    "solo_level": "248",
+    "hitpoints": "300",
     "attack_style": [
-      "Melee"
+      "Melee",
+      "Magic",
+      "Ranged"
     ],
-    "release_year": "2019",
-    "region": "Kourend",
+    "release_year": "2017",
+    "region": "Morytania",
     "solo": "Yes"
   }
 ]
