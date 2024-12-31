@@ -1,15 +1,13 @@
 [
   {
-    "name": "Grotesque Guardians",
-    "solo_level": "248",
-    "hitpoints": "300",
+    "name": "Scorpia",
+    "solo_level": "225",
+    "hitpoints": "200",
     "attack_style": [
-      "Melee",
-      "Magic",
-      "Ranged"
+      "Melee"
     ],
-    "release_year": "2017",
-    "region": "Morytania",
+    "release_year": "2014",
+    "region": "Wilderness",
     "solo": "Yes"
   }
 ]
