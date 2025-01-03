@@ -1,12 +1,13 @@
 [
   {
-    "name": "Scorpia",
-    "solo_level": "225",
-    "hitpoints": "200",
+    "name": "King Black Dragon",
+    "solo_level": "276",
+    "hitpoints": "255",
     "attack_style": [
-      "Melee"
+      "Melee",
+      "Dragonfire"
     ],
-    "release_year": "2014",
+    "release_year": "2002",
     "region": "Wilderness",
     "solo": "Yes"
   }
