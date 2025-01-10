@@ -1,14 +1,15 @@
 [
   {
-    "name": "King Black Dragon",
-    "solo_level": "276",
-    "hitpoints": "255",
+    "name": "Corrupted Hunllef",
+    "solo_level": "894",
+    "hitpoints": "1000",
     "attack_style": [
       "Melee",
-      "Dragonfire"
+      "Magic",
+      "Ranged"
     ],
-    "release_year": "2002",
-    "region": "Wilderness",
+    "release_year": "2019",
+    "region": "Tirannwn",
     "solo": "Yes"
   }
 ]
