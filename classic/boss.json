@@ -1,10 +1,12 @@
 [
   {
-    "name": "The Maiden of Sugadinti",
-    "solo_level": "940",
-    "hitpoints": "35,000",
+    "name": "Nylocas Vasilias",
+    "solo_level": "800",
+    "hitpoints": "25,000",
     "attack_style": [
-      "Magic"
+      "Melee",
+      "Magic",
+      "Ranged"
     ],
     "release_year": "2018",
     "region": "Morytania",
